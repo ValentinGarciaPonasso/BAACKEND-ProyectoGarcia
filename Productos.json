@@ -1,0 +1,92 @@
+[
+    {
+        "id": 1,
+        "title": "Camiseta Futbol",
+        "description": "Nueva camiseta temporada 2023",
+        "price": 5000,
+        "thumbnail": "www.img.com",
+        "code": "CF101",
+        "stock": 500
+    },
+    {
+        "id": 2,
+        "title": "Camiseta Futbol",
+        "description": "Nueva camiseta temporada 2023 - Variante 2",
+        "price": 5100,
+        "thumbnail": "www.img.com/variant2.jpg",
+        "code": "CF102",
+        "stock": 499
+    },
+    {
+        "id": 3,
+        "title": "Camiseta Futbol",
+        "description": "Nueva camiseta temporada 2023 - Variante 3",
+        "price": 5200,
+        "thumbnail": "www.img.com/variant3.jpg",
+        "code": "CF103",
+        "stock": 498
+    },
+    {
+        "id": 4,
+        "title": "Camiseta Futbol",
+        "description": "Nueva camiseta temporada 2023 - Variante 4",
+        "price": 5300,
+        "thumbnail": "www.img.com/variant4.jpg",
+        "code": "CF104",
+        "stock": 497
+    },
+    {
+        "id": 5,
+        "title": "Camiseta Futbol",
+        "description": "Nueva camiseta temporada 2023 - Variante 5",
+        "price": 5400,
+        "thumbnail": "www.img.com/variant5.jpg",
+        "code": "CF105",
+        "stock": 496
+    },
+    {
+        "id": 6,
+        "title": "Camiseta Futbol",
+        "description": "Nueva camiseta temporada 2023 - Variante 6",
+        "price": 5500,
+        "thumbnail": "www.img.com/variant6.jpg",
+        "code": "CF106",
+        "stock": 495
+    },
+    {
+        "id": 7,
+        "title": "Camiseta Futbol",
+        "description": "Nueva camiseta temporada 2023 - Variante 7",
+        "price": 5600,
+        "thumbnail": "www.img.com/variant7.jpg",
+        "code": "CF107",
+        "stock": 494
+    },
+    {
+        "id": 8,
+        "title": "Camiseta Futbol",
+        "description": "Nueva camiseta temporada 2023 - Variante 8",
+        "price": 5700,
+        "thumbnail": "www.img.com/variant8.jpg",
+        "code": "CF108",
+        "stock": 493
+    },
+    {
+        "id": 9,
+        "title": "Camiseta Futbol",
+        "description": "Nueva camiseta temporada 2023 - Variante 9",
+        "price": 5800,
+        "thumbnail": "www.img.com/variant9.jpg",
+        "code": "CF109",
+        "stock": 492
+    },
+    {
+        "id": 10,
+        "title": "Camiseta Futbol",
+        "description": "Nueva camiseta temporada 2023 - Variante 10",
+        "price": 5900,
+        "thumbnail": "www.img.com/variant10.jpg",
+        "code": "CF110",
+        "stock": 491
+    }
+]
