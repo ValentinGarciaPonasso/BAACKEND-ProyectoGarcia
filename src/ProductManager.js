@@ -8,10 +8,12 @@ export default class ProductManager {
 
 
     ///Metodo para agregar el producto al array
-    async addProduct(title, description, price, thumbnail, code, stock) {
+    async addProduct(title, description, code, price, status, stock, category, thumbnail) {
         try {
             /// Validamos que los campos sean obligatorios
-            if (!title || !description || !price || !thumbnail || !code || !stock) {
+            this.products = await this.getProduct();
+            if (!title || !description || !code || !price || !status || !stock || !category || !thumbnail) {
+                console.log('Favor completar todos los campos')
                 throw new Error('Favor completar todos los campos');
             };
 
@@ -20,28 +22,30 @@ export default class ProductManager {
                 id,
                 title,
                 description,
-                price,
-                thumbnail,
                 code,
-                stock
+                price,
+                status,
+                stock,
+                category,
+                thumbnail
             };
 
             /// busca si existe en el array un producto con el mismo código
             const isProduct = this.products.find(isProduct => isProduct.code === product.code);
             if (isProduct) {
+                console.log(`El producto con código ${product.code} ya existe`)
                 throw new Error(`El producto con código ${product.code} ya existe`);
             };
 
             /// Agrega el producto a la lista de productos
             this.products.push(product);
 
-            /// Devuelve el producto agregado
-            // await product;
             /// Agregamos el producto al archivo
             await fs.promises.writeFile(this.path, JSON.stringify(this.products), "utf-8");
             console.log("Producto creado con éxito");
         } catch (e) {
             console.error("Ocurrió un error al agregar el producto", e);
+            throw e;
         };
     };
 
@@ -75,11 +79,6 @@ export default class ProductManager {
             console.error('Error al consultar productos por ID', error);
             throw error;
         }
-        //     productId ? console.log(`Producto con id = ${id}:`, productId) : console.log(`Producto con id ${id} no encontrado`);
-        //     await productId || null;
-        // } catch (e) {
-        //     console.error("Error al consultar productos por ID", e)
-        // }
     };
 
     //Metodo para actualizar un producto
@@ -116,79 +115,7 @@ export default class ProductManager {
             console.log(`Producto con id = ${id} eliminado. Productos: `, productosActualizado);
         } catch (error) {
             console.error('Error al eliminar el producto:', error);
+            throw error;
         }
     }
 };
-
-
-
-
-// async function test() {
-//     try {
-//         // Recibe la ruta './Productos.json' para guardar los archivos en dicha carpeta
-//         const productManager = new ProductManager('./Productos.json');
-
-//         // Mostramos en consola previo a agregar producto
-//         console.log("Antes de agregar producto:");
-//         await productManager.getProduct();
-
-//         // Agregamos producto
-//         console.log("Agregando producto...");
-//         await productManager.addProduct("Camiseta Futbol", "Nueva camiseta temporada 2023", 1500, "www.img.com", "CF101", 500);
-
-//         // Mostramos en consola luego de agregar producto
-//         console.log("Después de agregar producto:");
-//         await productManager.getProduct();
-
-//         // Intentamos agregar un producto en los que faltan datos
-//         console.log("Agregamos producto donde faltan datos...");
-//         await productManager.addProduct("Camiseta Futbol", 1500, "www.img.com", "CF101");
-
-//         // Intentamos agregar un producto con código repetido
-//         console.log("Agregando producto con código repetido...");
-//         await productManager.addProduct("Pantalon Futbol", "Nuevo pantalón temporada 2023", 1000, "www.img.com", "CF101", 500);
-
-//         //         // Buscamos producto por ID existente y mostramos en pantalla
-//         console.log("Buscamos producto con id existente...");
-//         const idSearch = 1;
-//         await productManager.getProductById(idSearch);
-
-//         // Agregamos 2do producto
-//         console.log("Agregando producto...");
-//         await productManager.addProduct("Camiseta Futbol 2", "Nueva camiseta alternativa temporada 2023", 2500, "www.img.com", "CF102", 300);
-
-//         // Mostramos en consola luego de agregar producto
-//         console.log("Después de agregar producto:");
-//         await productManager.getProduct();
-
-//         //         // Buscamos producto por ID inexistente y mostramos en pantalla
-//         console.log("Buscamos producto con id inexistente...");
-//         const idSearch2 = 99; // Cambiado a un ID inexistente
-//         await productManager.getProductById(idSearch2);
-
-//         //         // Buscamos el segundo producto por ID existente y mostramos en pantalla
-//         console.log("Buscamos  el segundo producto con id existente...");
-//         const idSearch3 = 2;
-//         await productManager.getProductById(idSearch3);
-
-//         //Modificamos el primer producto
-//         console.log("Modificamos el primer producto");
-//         await productManager.updateProduct(idSearch, 'price', 5000);
-
-//         // Mostramos en consola todos los productos luego de modificar el producto
-//         console.log("Después de modificar el producto:");
-//         await productManager.getProduct();
-
-//         //Eliminamos el segundo producto
-//         console.log("Eliminamos el segundo producto");
-//         await productManager.deleteProduct(idSearch3);
-
-//         //Eliminamos un producto inexistente
-//         console.log("Eliminamos un producto inexistente");
-//         await productManager.deleteProduct(idSearch3);
-
-//     } catch (error) {
-//         console.error("Ocurrió un error:", error);
-//     }
-// }
-// test();

@@ -1,42 +1,24 @@
 import express from 'express';
-import fs from 'fs';
-import ProductManager from "./ProductManager.js";
+import { productRouter, productRouterById } from './routes/product.router.js';
+import { cartRouter, cartRouterById } from './routes/cart.router.js';
 
 const port = 8080;
 const app = express();
-const productManager = new ProductManager('./Productos.json');
 
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json())
 
-app.get('/products/:productId', async (req, res) => {
-    const id = parseInt(req.params.productId, 10);
-    try {
-        const product = await productManager.getProductById(id);
-        if (product) {
-            res.json(product);
-        } else {
-            res.status(404).send('Producto no encontrado');
-        }
-    } catch (error) {
-        res.status(500).send('Error al leer archivo');
-    }
-});
 
-app.get('/products', async (req, res) => {
-    try {
-        const product = await productManager.getProduct();
-        const limitQuery = req.query.limit;
-        if (limitQuery) {
-            const productosLimitados = product.slice (0,limitQuery);
-            res.json(productosLimitados);
-        } else {
-            res.json(product);
-        }
-    } catch (error) {
-        res.status(500).send('Error al leer archivo');
-    }
-});
+//Productos
+app.get('/api/products',productRouter);
+app.get('/api/products/:productId',productRouterById);
+app.post('/api/products',productRouter);
+app.put('/api/products/:productId',productRouterById);
+app.delete('/api/products/:productId',productRouterById);
 
+//Carrito
+app.post('/api/carts', cartRouter);
+app.get('/api/carts/:cid', cartRouterById);
+app.post('/api/carts/:cid/product/:pid', cartRouterById);
 
 app.listen(port, () => {
     console.log(`El servidor esta escuchando por el puerto ${port}`);
