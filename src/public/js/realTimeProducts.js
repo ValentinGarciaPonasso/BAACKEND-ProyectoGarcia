@@ -1,24 +1,10 @@
 let socket = io.connect("http://localhost:8080", {forceNew: true});
 
 
-socket.on("productos", (data) => {
-    render (data);
-})
 
-function render(data) {
-    const html = data.map((data, index) => {
-        return `
-            <div> 
-                <strong>${data.author}</strong>
-                <em>${data.text}</em>
-            </div>
-        `;
-    }).join(" ");
-    document.getElementById('messages').innerHTML = html;
-}
 
 function addProduct (e){
-    console.log("Estoy en la funcion addMessage");
+    console.log("Estoy en la funcion addProduct");
     const newProduct = {
         title: document.getElementById('title').value,
         description: document.getElementById('description').value,
@@ -32,3 +18,10 @@ function addProduct (e){
     socket.emit("nuevoProducto", newProduct);                                     ///enviamos desde el cliente un mensaje
     return false;
 }
+
+function deleteProduct (e){
+    console.log("Estoy en la funcion deleteProduct");
+    const deleteProduct = document.getElementById('id').value;
+    socket.emit("eliminarProducto", deleteProduct);                                     ///enviamos desde el cliente un mensaje
+    return false;
+};

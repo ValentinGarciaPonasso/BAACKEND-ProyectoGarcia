@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,64 +9,71 @@
     <script type="text/javascript" src="/socket.io/socket.io.js"></script>
     <script type="text/javascript" src="/js/realTimeProducts.js"></script>
 </head>
+
 <body>
     <div>
-    <h1>Productos en tiempo real</h1>
-    <div>
-        <h2>Agregar Producto:</h2>
-        {{!-- <form action="/api/realTimeProducts" method="POST"> --}}
-            <form onsubmit="return addProduct(this)">
-                <label for="title">Nombre:</label>
-                <input type="text" id="title" name="title" required>
+        <h1>Productos en tiempo real</h1>
+        
+        <div>
+            <h2>Agregar Producto:</h2>
+            {{!-- <form action="/api/realTimeProducts" method="POST"> --}}
+                <form onsubmit="return addProduct(this)">
+                    <label for="title">Nombre:</label>
+                    <input type="text" id="title" name="title" required>
 
-                <label for="description">Descripción:</label>
-                <input type="text" id="description" name="description" required>
+                    <label for="description">Descripción:</label>
+                    <input type="text" id="description" name="description" required>
 
-                <label for="code">Código:</label>
-                <input type="text" id="code" name="code" required>
+                    <label for="code">Código:</label>
+                    <input type="text" id="code" name="code" required>
 
-                <label for="price">Precio:</label>
-                <input type="text" id="price" name="price" required>
+                    <label for="price">Precio:</label>
+                    <input type="text" id="price" name="price" required>
 
-                <label for="status">Status:</label>
-                <input type="text" id="status" name="status" required>
+                    <label for="status">Status:</label>
+                    <input type="text" id="status" name="status" required>
 
-                <label for="stock">Stock:</label>
-                <input type="text" id="stock" name="stock" required>
+                    <label for="stock">Stock:</label>
+                    <input type="text" id="stock" name="stock" required>
 
-                <label for="category">Categoria:</label>
-                <input type="text" id="category" name="category" required>
+                    <label for="category">Categoria:</label>
+                    <input type="text" id="category" name="category" required>
 
-                <label for="thumbnail">Imagen:</label>
-                <input type="file" id="thumbnail" name="thumbnail" accept="image/*" required><br>
+                    <label for="thumbnail">Imagen:</label>
+                    <input type="file" id="thumbnail" name="thumbnail" accept="image/*" required><br>
 
-                <button type="submit" id="add_Button">Agregar Producto</button>
-            </form>
-
-            {{!-- <h2>Borrar Producto</h2>
-            <form action="/api/products/" method="DELETE"></form>
-            ID:<input type="number" id="iD" placeholder="ID"> ID a elminar</br>
-            <button type="button" id="delete_Button" class="swal-button swal-button--confirm">Eliminar item</button>
-        </form> --}}
-    </div>
-    <div>
-        <h2>Listado de Productos:</h2>
-        <div class="bloque" id="data">
-            {{#each product}}
-            <div class="tarjeta">
-                <p>ID: {{this.id}}</p>
-                <p>Titulo: {{this.title}}</p>
-                <p>Descripción: {{this.description}}</p>
-                <p>Código: {{this.code}}</p>
-                <p>Precio: {{this.price}}</p>
-                <p>Stock: {{this.stock}}</p>
-                <p>Categoría: {{this.category}}</p>
-            </div>
-            {{/each}}
+                    <button type="submit" id="add_Button">Agregar Producto</button>
+                </form>
         </div>
-    </div>
 
-</div>
+        <div>
+            <h2>Eliminar Producto</h2>
+            <form onsubmit="return deleteProduct(this)">
+                <label for="id">ID:</label>
+                <input type="number" id="id" name="id" required>
+                <button type="submit" id="delete_Button">Eliminar Producto</button>
+            </form>
+        </div>
+        
+        <div>
+            <h2>Listado de Productos:</h2>
+            <div class="bloque" id="data">
+                {{#each product}}
+                <div class="tarjeta">
+                    <p>ID: {{this.id}}</p>
+                    <p>Titulo: {{this.title}}</p>
+                    <p>Descripción: {{this.description}}</p>
+                    <p>Código: {{this.code}}</p>
+                    <p>Precio: {{this.price}}</p>
+                    <p>Stock: {{this.stock}}</p>
+                    <p>Categoría: {{this.category}}</p>
+                </div>
+                {{/each}}
+            </div>
+        </div>
+
+    </div>
 
 </body>
+
 </html>

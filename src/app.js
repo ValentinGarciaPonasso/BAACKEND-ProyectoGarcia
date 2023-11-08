@@ -29,12 +29,21 @@ const server = app.listen(port,()=>{
 })
 const io = new Server(server);
 
+
+
 io.on('connection', (socket) => {
     console.log("Un cliente se ha conectado");
     socket.on("nuevoProducto", (newProduct)=> {                                                      ///recibimos desde el servidor el mensaje y lo pusheamos a nuestro array
         console.log("Nuevo producto recibido:");
         console.log(newProduct);
+        productManager.addProduct(newProduct.title, newProduct.description, newProduct.code, newProduct.price, newProduct.status, newProduct.stock, newProduct.category, newProduct.thumbnail);
     })
+    socket.on("eliminarProducto", (deleteProduct)=> {
+        console.log("Nuevo producto a eliminar:");
+        console.log(deleteProduct);
+        const id = parseInt(deleteProduct, 10)
+        productManager.deleteProduct(id)
+    });
 });
 
 
@@ -47,7 +56,7 @@ app.put('/api/products/:productId',productRouterById);
 app.delete('/api/products/:productId',productRouterById);
 //MOSTRAMOS EL PRODUCTO EN EL HTML
 app.get('/',productRouter);
-// app.get('/realTimeProducts',productRouter);
+app.get('/realTimeProducts',productRouter);
 
 
 //Carrito
