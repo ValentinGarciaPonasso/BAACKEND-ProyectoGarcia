@@ -1,5 +1,6 @@
 import express from 'express';
 import ProductManager from "../ProductManager.js";
+import { uploader } from '../utilitis.js';
 
 const productRouter = express.Router();
 const productRouterById = express.Router();
@@ -101,5 +102,35 @@ productRouter.post('/api/products', async (req, res) => {
         res.status(500).send('Error al agregar prodcuto');
     }
 });
+
+//MOSTRAMOS PRODUCTOS EN PANTALLA
+productRouter.get('/', async (req, res) => {
+    try {
+        const product = await productManager.getProduct();
+        console.log(product);
+        res.render('home', {
+            product: product,
+            title: "Listado de Productos"
+        })
+    } catch (e) {
+        console.log(e);
+        res.status(500).send('Error al leer archivo');
+    }
+});
+
+productRouter.get('/realTimeProducts', async (req, res) => {
+    try {
+        const product = await productManager.getProduct();
+        res.render('index', {
+            // layout: 'realTimeProducts',
+            product: product,
+            title: "Productos en tiempo Real"
+        })
+    } catch (e) {
+        console.log(e);
+        res.status(500).send('Error al leer archivo');
+    }
+});
+
 
 export { productRouter };

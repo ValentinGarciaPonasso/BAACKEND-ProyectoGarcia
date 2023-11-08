@@ -1,0 +1,25 @@
+.tarjeta {
+    font-weight: bold;
+    background-color: green;
+    padding: 10px;
+    margin: 2px;
+    width: 300px;
+    border-radius: 10%;
+
+}
+
+.bloque {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    margin: 2px;
+    
+}
+
+h1 {
+    color: darkblue
+}
+
+body {
+    background-color: antiquewhite;
+}
