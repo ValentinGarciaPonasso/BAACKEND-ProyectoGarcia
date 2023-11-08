@@ -1,7 +1,9 @@
 let socket = io.connect("http://localhost:8080", {forceNew: true});
 
 
-
+socket.on ("productoActualizado", () => {
+    window.location.href = "/realTimeProducts";
+})
 
 function addProduct (e){
     console.log("Estoy en la funcion addProduct");

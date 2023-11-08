@@ -37,12 +37,14 @@ io.on('connection', (socket) => {
         console.log("Nuevo producto recibido:");
         console.log(newProduct);
         productManager.addProduct(newProduct.title, newProduct.description, newProduct.code, newProduct.price, newProduct.status, newProduct.stock, newProduct.category, newProduct.thumbnail);
+        io.emit("productoActualizado");
     })
     socket.on("eliminarProducto", (deleteProduct)=> {
         console.log("Nuevo producto a eliminar:");
         console.log(deleteProduct);
         const id = parseInt(deleteProduct, 10)
         productManager.deleteProduct(id)
+        io.emit("productoActualizado");
     });
 });
 

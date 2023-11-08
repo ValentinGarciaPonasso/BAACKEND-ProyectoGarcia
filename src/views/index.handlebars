@@ -14,7 +14,7 @@
     <div>
         <h1>Productos en tiempo real</h1>
         
-        <div>
+        <div class="form">
             <h2>Agregar Producto:</h2>
             {{!-- <form action="/api/realTimeProducts" method="POST"> --}}
                 <form onsubmit="return addProduct(this)">
@@ -46,7 +46,7 @@
                 </form>
         </div>
 
-        <div>
+        <div class="form">
             <h2>Eliminar Producto</h2>
             <form onsubmit="return deleteProduct(this)">
                 <label for="id">ID:</label>
