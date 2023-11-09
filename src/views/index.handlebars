@@ -57,8 +57,8 @@
         
         <div>
             <h2>Listado de Productos:</h2>
-            <div class="bloque" id="data">
-                {{#each product}}
+            <div>
+                {{!-- {{#each product}}
                 <div class="tarjeta">
                     <p>ID: {{this.id}}</p>
                     <p>Titulo: {{this.title}}</p>
@@ -68,7 +68,8 @@
                     <p>Stock: {{this.stock}}</p>
                     <p>Categoría: {{this.category}}</p>
                 </div>
-                {{/each}}
+                {{/each}} --}}
+                <div class="bloque" id="productList"></div>
             </div>
         </div>
 

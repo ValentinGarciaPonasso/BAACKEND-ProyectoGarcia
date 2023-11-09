@@ -5,7 +5,10 @@
     margin: 2px;
     width: 300px;
     border-radius: 10%;
+}
 
+ul li {
+    list-style-type: none;
 }
 
 .bloque {

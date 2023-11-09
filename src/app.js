@@ -31,20 +31,35 @@ const io = new Server(server);
 
 
 
-io.on('connection', (socket) => {
+io.on('connection', async (socket) => {
     console.log("Un cliente se ha conectado");
-    socket.on("nuevoProducto", (newProduct)=> {                                                      ///recibimos desde el servidor el mensaje y lo pusheamos a nuestro array
+    try {
+        const productos = await productManager.getProduct();
+        await io.emit("productoActualizado", productos);
+    } catch (error) {
+        console.error("Error al obtener producto:", error);
+    }
+    socket.on("nuevoProducto", async  (newProduct)=> {                                                      ///recibimos desde el servidor el mensaje y lo pusheamos a nuestro array
         console.log("Nuevo producto recibido:");
         console.log(newProduct);
-        productManager.addProduct(newProduct.title, newProduct.description, newProduct.code, newProduct.price, newProduct.status, newProduct.stock, newProduct.category, newProduct.thumbnail);
-        io.emit("productoActualizado");
-    })
-    socket.on("eliminarProducto", (deleteProduct)=> {
-        console.log("Nuevo producto a eliminar:");
-        console.log(deleteProduct);
-        const id = parseInt(deleteProduct, 10)
-        productManager.deleteProduct(id)
-        io.emit("productoActualizado");
+        try {
+            await productManager.addProduct(newProduct.title, newProduct.description, newProduct.code, newProduct.price, newProduct.status, newProduct.stock, newProduct.category, newProduct.thumbnail);
+            // await io.emit("productoActualizado");
+        } catch (e) {
+            console.error("Error al agregar producto:", error);
+        };
+    });
+    socket.on("eliminarProducto", async (deleteProduct)=> {
+            console.log("Nuevo producto a eliminar:");
+            console.log(deleteProduct);
+            const id = parseInt(deleteProduct, 10)
+            try {
+                await productManager.deleteProduct(id);
+                const productos = await productManager.getProduct();
+                // io.emit("productoActualizado", productos);
+            } catch (e) {
+                console.error("Error al eliminar producto:", error);
+            };
     });
 });
 
