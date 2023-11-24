@@ -5,8 +5,8 @@ import _dirname from './utilitis.js';
 import handlebars from 'express-handlebars';
 import http from 'http';
 import { Server} from 'socket.io';
-import ProductManager from "./ProductManager.js";
-import ProductManagerMongo from "./ProductManagerMongo.js";
+import ProductManager from "./dao/ProductManager.js";
+import ProductManagerMongo from "./dao/ProductManagerMongo.js";
 import { uploader } from './utilitis.js';
 import {db} from "./config/databse.js";
 

@@ -1,8 +1,8 @@
 import express from 'express';
-import ProductManager from "../ProductManager.js";
-import ProductManagerMongo from "../ProductManagerMongo.js";
+import ProductManager from "../dao/ProductManager.js";
+import ProductManagerMongo from "../dao/ProductManagerMongo.js";
 import { uploader } from '../utilitis.js';
-import Products from '../models/product.models.js';
+import Products from '../dao/models/product.models.js';
 
 
 const productRouter = express.Router();
@@ -147,11 +147,19 @@ export { productRouter };
 productRouterDb.get("/", async (req, res) => {
     try {
         const products = await productManagerMongo.getProduct();
-        res.status(200).json(products);
+        const limitQuery = req.query.limit;
+        if (limitQuery) {
+            const productosLimitados = products.slice(0, limitQuery);
+            res.status(200).json(productosLimitados);
+        } else {
+            res.status(200).json(products);
+        }
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 });
+
+
 
 productRouterDb.get("/:id", async (req, res) => {
     try {
