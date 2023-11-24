@@ -1,6 +1,6 @@
 import express from 'express';
 import { productRouter, productRouterById, productRouterDb } from './routes/product.router.js';
-import { cartRouter, cartRouterById } from './routes/cart.router.js';
+import { cartRouter, cartRouterById, cartRouterDb } from './routes/cart.router.js';
 import _dirname from './utilitis.js'; 
 import handlebars from 'express-handlebars';
 import http from 'http';
@@ -89,6 +89,7 @@ app.post('/api/carts/:cid/product/:pid', cartRouterById);
 
 ////MONGO
 app.use("/api/productos", productRouterDb);
+app.use("/api/carrito", cartRouterDb);
 
 
 

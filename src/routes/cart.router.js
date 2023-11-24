@@ -1,11 +1,14 @@
 import express from 'express';
 import CartManager from "../dao/CartManager.js";
 import ProductManager from '../dao/ProductManager.js';
+import CartManagerMongo from '../dao/CartManagerMongo.js';
 
 const cartRouter = express.Router();
 const cartRouterById = express.Router();
+const cartRouterDb = express.Router();
 
 const cartManager = new CartManager('./Cart.json');
+const cartManagerMongo = new CartManagerMongo();
 const productManager = new ProductManager('./Productos.json');
 
 
@@ -68,3 +71,35 @@ cartRouterById.post('/api/carts/:cid/product/:pid', async(req, res) => {
 })
 
 export {cartRouterById};
+
+///MONGO
+
+cartRouterDb.post('/', async(req, res) => {
+    try {
+        const newCart = await cartManagerMongo.createCart();
+        res.status(200).json({
+            massage: "Carrito creado",
+            data: newCart
+        });
+    } catch (e) {
+        console.log(e);
+        res.status(500).send('Error al crear el carrito');
+    }
+})
+
+
+cartRouterDb.get('/:cid', async (req, res) => {
+    const id = parseInt(req.params.cid, 10);
+    try {
+        const cart = await cartManagerMongo.getCartById(id);
+        if (cart) {
+            res.status(200).json(cart);
+        } else {
+            res.status(404).send('Carrito no encontrado');
+        }
+    } catch (e) {
+        res.status(500).send('Error al leer archivo');
+    }
+});
+
+export {cartRouterDb};

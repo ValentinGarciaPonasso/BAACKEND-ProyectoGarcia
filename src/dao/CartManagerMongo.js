@@ -9,13 +9,16 @@ export default class CartManagerMongo {
 
     async createCart (){
         try {
+            this.carts = await Cart.find ();
+            console.log('carritos: ', this.carts);
             //generamos un id único
             const cartId = this.carts.length + 1;
             const cartProducts = [];
             const cart = new Cart({
-                cartId,
-                cartProducts,
+                id: cartId,
+                products: cartProducts,
             });
+            console.log('carrito: ', cart)
             /// Agregamos el carrito al archivo
             const newCart = await cart.save();
             console.log("Carrito creado con éxito");
