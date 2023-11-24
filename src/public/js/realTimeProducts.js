@@ -21,9 +21,13 @@ function render(products) {
         const properties = Object.keys(product);
 
         properties.forEach(prop => {
-            const listItem = document.createElement('li');
-            listItem.textContent = `${prop}: ${product[prop]}`;
-            productUL.appendChild(listItem);
+            if(prop === '_id' || prop === '__v'){
+
+            } else {
+                const listItem = document.createElement('li');
+                listItem.textContent = `${prop}: ${product[prop]}`;
+                productUL.appendChild(listItem);
+            }
         });
         productList.appendChild(productUL);
     });

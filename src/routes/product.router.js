@@ -1,11 +1,17 @@
 import express from 'express';
 import ProductManager from "../ProductManager.js";
+import ProductManagerMongo from "../ProductManagerMongo.js";
 import { uploader } from '../utilitis.js';
+import Products from '../models/product.models.js';
+
 
 const productRouter = express.Router();
 const productRouterById = express.Router();
 
+const productRouterDb = express.Router();
+
 const productManager = new ProductManager('./Productos.json');
+const productManagerMongo = new ProductManagerMongo();
 
 
 ///PRODUCTO POR ID
@@ -133,4 +139,75 @@ productRouter.get('/realTimeProducts', async (req, res) => {
 });
 
 
+
 export { productRouter };
+
+///DB CON MONGO
+
+productRouterDb.get("/", async (req, res) => {
+    try {
+        const products = await productManagerMongo.getProduct();
+        res.status(200).json(products);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+productRouterDb.get("/:id", async (req, res) => {
+    try {
+        const products = await productManagerMongo.getProductById(req.params.id);
+        res.status(200).json(products);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+
+productRouterDb.post('/', async (req, res) => {
+    try {
+        const newProduct = await {
+            title: req.body.title,
+            description: req.body.description,
+            code: req.body.code,
+            price: parseInt(req.body.price, 10),
+            status: true,
+            stock: parseInt(req.body.stock, 10),
+            category: req.body.category,
+            thumbnail: req.body.thumbnail
+        }
+        const newProducts = await productManagerMongo.addProduct(newProduct.title, newProduct.description, newProduct.code, newProduct.price, newProduct.status, newProduct.stock, newProduct.category, newProduct.thumbnail);
+        res.status(201).json({
+            massage: "Producto agregado",
+            data: newProducts
+        });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+productRouterDb.put("/:id", async (req, res) => {
+    const id = req.params.id;
+    const productUpdate = req.body
+    console.log("id es: ", id);
+    console.log("Datos a actualizar: ", productUpdate)
+    try {
+        const product = await productManagerMongo.updateProduct(id, productUpdate);
+        if (!product) {
+            return res.status(404).json({ message: "Producto no encontrado" });
+        };
+        res.status(201).json(product);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+productRouterDb.delete("/:id", async (req, res) => {
+    try {
+        const products = await productManagerMongo.deleteProduct(req.params.id)
+        res.status(201).json(products);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+export { productRouterDb };

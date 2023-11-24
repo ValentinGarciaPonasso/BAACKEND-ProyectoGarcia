@@ -1,17 +1,20 @@
 import express from 'express';
-import { productRouter, productRouterById } from './routes/product.router.js';
+import { productRouter, productRouterById, productRouterDb } from './routes/product.router.js';
 import { cartRouter, cartRouterById } from './routes/cart.router.js';
 import _dirname from './utilitis.js'; 
 import handlebars from 'express-handlebars';
 import http from 'http';
 import { Server} from 'socket.io';
 import ProductManager from "./ProductManager.js";
+import ProductManagerMongo from "./ProductManagerMongo.js";
 import { uploader } from './utilitis.js';
+import {db} from "./config/databse.js";
 
 const port = 8080;
 const app = express();
 
 const productManager = new ProductManager('./Productos.json');
+const productManagerMongo = new ProductManagerMongo();
 
 //Estructura Handlebars
 app.engine('handlebars', handlebars.engine());
@@ -34,7 +37,7 @@ const io = new Server(server);
 io.on('connection', async (socket) => {
     console.log("Un cliente se ha conectado");
     try {
-        const productos = await productManager.getProduct();
+        const productos = await productManagerMongo.getProduct();
         await io.emit("productoActualizado", productos);
     } catch (error) {
         console.error("Error al obtener producto:", error);
@@ -43,8 +46,9 @@ io.on('connection', async (socket) => {
         console.log("Nuevo producto recibido:");
         console.log(newProduct);
         try {
-            await productManager.addProduct(newProduct.title, newProduct.description, newProduct.code, newProduct.price, newProduct.status, newProduct.stock, newProduct.category, newProduct.thumbnail);
-            // await io.emit("productoActualizado");
+            await productManagerMongo.addProduct(newProduct.title, newProduct.description, newProduct.code, newProduct.price, newProduct.status, newProduct.stock, newProduct.category, newProduct.thumbnail);
+            const productos = await productManagerMongo.getProduct();
+            await io.emit("productoActualizado", productos);
         } catch (e) {
             console.error("Error al agregar producto:", error);
         };
@@ -54,9 +58,9 @@ io.on('connection', async (socket) => {
             console.log(deleteProduct);
             const id = parseInt(deleteProduct, 10)
             try {
-                await productManager.deleteProduct(id);
-                const productos = await productManager.getProduct();
-                // io.emit("productoActualizado", productos);
+                await productManagerMongo.deleteProduct(id);
+                const productos = await productManagerMongo.getProduct();
+                io.emit("productoActualizado", productos);
             } catch (e) {
                 console.error("Error al eliminar producto:", error);
             };
@@ -80,6 +84,11 @@ app.get('/realTimeProducts',productRouter);
 app.post('/api/carts', cartRouter);
 app.get('/api/carts/:cid', cartRouterById);
 app.post('/api/carts/:cid/product/:pid', cartRouterById);
+
+
+
+////MONGO
+app.use("/api/productos", productRouterDb);
 
 
 
