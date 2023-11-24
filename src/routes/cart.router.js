@@ -1,6 +1,7 @@
 import express from 'express';
 import CartManager from "../dao/CartManager.js";
 import ProductManager from '../dao/ProductManager.js';
+import ProductManagerMongo from "../dao/ProductManagerMongo.js";
 import CartManagerMongo from '../dao/CartManagerMongo.js';
 
 const cartRouter = express.Router();
@@ -10,6 +11,7 @@ const cartRouterDb = express.Router();
 const cartManager = new CartManager('./Cart.json');
 const cartManagerMongo = new CartManagerMongo();
 const productManager = new ProductManager('./Productos.json');
+const productManagerMongo = new ProductManagerMongo();
 
 
 ///CARRITOS GENERICOS
@@ -101,5 +103,26 @@ cartRouterDb.get('/:cid', async (req, res) => {
         res.status(500).send('Error al leer archivo');
     }
 });
+
+cartRouterDb.post('/:cid/productos/:pid', async(req, res) => {
+    const cartId = parseInt(req.params.cid, 10);
+    const productId = parseInt(req.params.pid, 10);
+    try{
+        const product = await productManagerMongo.getProductById(productId);
+        console.log(`Buscamos producto con id ${productId}: ` ,product);
+        if(product) {
+            const newCarrito = await cartManagerMongo.addProductToCart(cartId, product);
+            console.log(`Nuevo carrito: ` ,newCarrito);
+            res.status(200).json({
+                massage: "Producto agregado al carrito",
+                data: newCarrito
+            });
+        } else {
+            res.status(404).send("Producto no encontrado");
+        }
+    } catch (e) {
+        res.status(500).send('Error al agregar producto al carrito');
+    }
+})
 
 export {cartRouterDb};

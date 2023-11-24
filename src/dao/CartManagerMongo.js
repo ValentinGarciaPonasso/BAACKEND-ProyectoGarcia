@@ -52,31 +52,35 @@ export default class CartManagerMongo {
             // const cart = carts.find(cart => cart.id === cartId);
             const cart = await Cart.findOne ({id: cartId})
             const idUpdate =  cart._id.toString()
+            console.log("idUpdate en manager: ", idUpdate);
             console.log(`Buscamos carrito con id ${cartId}: ` ,cart);
             if(cart) {
                 console.log("cart.Products: ", cart.products);
-                const isProduct = cart.products.find(isProduct => isProduct.id === product.id);
-                console.log("isProduct: ", isProduct);
+                console.log("Product en manager ", product);
+                const idProducto = product[0].id;
+                console.log("Product ID en manager ", idProducto);
+                const isProduct = cart.products.find(isProduct => isProduct.id === idProducto);
+                console.log("isProduct: ", isProduct, " / id del producto que mandamos por params: ",idProducto);
                 if (isProduct) {
                     //hacer un update
                     isProduct.quantity = isProduct.quantity + 1;
                     console.log("Producto sumado con éxito, nuevo isProduct: ", isProduct);
                     // await fs.promises.writeFile(this.path, JSON.stringify(carts), "utf-8");
-                    const carts = await cart.findByIdAndUpdate (idUpdate,isProduct, {new:true}  );
+                    const carts = await Cart.findByIdAndUpdate (idUpdate,cart, {new:true}  );
                     console.log("cart: ", carts);
                     return carts;
                 } else {
+                    console.log("Hola en el else")
                     //hacer un update
                     const newproduct = {
-                        id: product.id,
+                        id: idProducto,
                         quantity: 1
                     }
                     cart.products.push(newproduct);
                     console.log("cart.Products despues de agregado: ", cart.products);
                     console.log("Carrito con el producto agregado: ", cart);
-                    console.log("Todos los carritos: ", carts);
                     // await fs.promises.writeFile(this.path, JSON.stringify(carts), "utf-8");
-                    const carts = await cart.findByIdAndUpdate (idUpdate,newproduct, {new:true}  );
+                    const carts = await Cart.findByIdAndUpdate (idUpdate,cart, {new:true}  );
                     console.log("cart: ", carts);
                     console.log("Producto agregado con éxito");
                     return carts;
