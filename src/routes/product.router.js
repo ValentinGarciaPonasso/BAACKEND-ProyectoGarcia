@@ -138,6 +138,21 @@ productRouter.get('/realTimeProducts', async (req, res) => {
     }
 });
 
+productRouter.get('/products', async (req, res) => {
+    try {
+        const { limit = 10, page = 1, sort, category, available} = req.query;
+        const products = await productManagerMongo.getProductPaginate(page, limit, sort,category, available);
+        console.log("Productos desde el manager",products);
+        res.render('layouts/products', {
+            product: products,
+            title: "Listado de Productos"
+        })
+    } catch (e) {
+        console.log(e);
+        res.status(500).send('Error al leer archivo');
+    }
+});
+
 
 
 export { productRouter };
@@ -146,14 +161,21 @@ export { productRouter };
 
 productRouterDb.get("/", async (req, res) => {
     try {
-        const products = await productManagerMongo.getProduct();
-        const limitQuery = req.query.limit;
-        if (limitQuery) {
-            const productosLimitados = products.slice(0, limitQuery);
-            res.status(200).json(productosLimitados);
-        } else {
-            res.status(200).json(products);
-        }
+        const { limit = 10, page = 1, sort, category, available} = req.query;
+        const products = await productManagerMongo.getProductPaginate(page, limit, sort,category, available);
+        res.status(200).json({
+            status: 'success',
+            payload: products.docs,
+            totalPages: products.totalPages,
+            prevPage: products.prevPage,
+            nextPage: products.nextPage,
+            page: products.page,
+            hasPrevPage: products.hasPrevPage,
+            hasNextPage: products.hasNextPage,
+            prevLink: products.hasPrevPage ? `/api/productos?page=${products.prevPage}`+(limit ? `&limit=${products.limit}` : '')+(sort ? `&sort=${sort}` : '')+(category ? `&category=${category}` : '')+(available ? `&available=${available}` : '') : null,
+            nextLink: products.hasNextPage ? `/api/productos?page=${products.nextPage}`+(limit ? `&limit=${products.limit}` : '')+(sort ? `&sort=${sort}` : '')+(category ? `&category=${category}` : '')+(available ? `&available=${available}` : '') : null 
+        });
+        // // res.status(200).json(products);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

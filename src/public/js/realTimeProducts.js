@@ -40,7 +40,7 @@ function addProduct(e) {
         description: document.getElementById('description').value,
         code: document.getElementById('code').value,
         price: document.getElementById('price').value,
-        status: document.getElementById('status').value,
+        status: document.getElementById('available').value,
         stock: document.getElementById('stock').value,
         category: document.getElementById('category').value,
         thumbnail: document.getElementById('thumbnail').value

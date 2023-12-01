@@ -8,11 +8,11 @@ export default class ProductManagerMongo {
 
 
     ///Metodo para agregar el producto al array
-    async addProduct(title, description, code, price, status, stock, category, thumbnail, esVisible) {
+    async addProduct(title, description, code, price, available, stock, category, thumbnail, esVisible) {
         try {
             /// Validamos que los campos sean obligatorios
             this.products = await this.getProduct();
-            if (!title || !description || !code || !price || !status || !stock || !category || !thumbnail) {
+            if (!title || !description || !code || !price || !available || !stock || !category || !thumbnail) {
                 console.log('Favor completar todos los campos')
                 throw new Error('Favor completar todos los campos');
             };
@@ -24,7 +24,7 @@ export default class ProductManagerMongo {
                 description,
                 code,
                 price,
-                status,
+                available,
                 stock,
                 category,
                 thumbnail
@@ -59,6 +59,40 @@ export default class ProductManagerMongo {
             throw e;
         }
     };
+
+    //Metodo que trae todos los productos con paginate
+
+    async getProductPaginate (pageNumber, pageSize, sortOrder, category, available) {
+        try {
+            let options = {
+                page: parseInt(pageNumber),
+                limit: parseInt(pageSize),
+            };
+            if (sortOrder === 'asc') {
+                options.sort = { price: 1 };
+            } else if (sortOrder === 'desc') {
+                options.sort = { price: -1 };
+            }
+            let query ={}
+            if(category){
+                query.category = category
+                if (available) {
+                    query.available = available
+                }
+            } else {
+                if (available) {
+                    query.available = available
+                }
+            };
+            console.log(query);
+            const products = await Products.paginate(query, options);
+            console.log("Productos: ", products);
+            return products
+        } catch (e) {
+            console.error("Error al consultar productos", e)
+            throw e;
+        }
+    }
 
     ///Metodo que devuelve todos los productos con cierto ID
     async getProductById(idFind) {

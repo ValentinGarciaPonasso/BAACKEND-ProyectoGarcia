@@ -1,5 +1,6 @@
 import fs from 'fs';
 import Cart from './models/cart.models.js';
+import Products from './models/product.models.js';
 
 export default class CartManagerMongo {
     constructor() {
@@ -7,9 +8,9 @@ export default class CartManagerMongo {
     };
 
 
-    async createCart (){
+    async createCart() {
         try {
-            this.carts = await Cart.find ();
+            this.carts = await Cart.find();
             console.log('carritos: ', this.carts);
             //generamos un id único
             const cartId = this.carts.length + 1;
@@ -31,68 +32,129 @@ export default class CartManagerMongo {
 
     async getCartById(id) {
         try {
-            const carts = await Cart.find ();
-            const cartId = carts.find(cart => cart.id === id);
-            if (cartId) {
-                console.log(`Carrito con id = ${id}:`, cartId);
-                return cartId;
+            console.log('id aca', id)
+            const carts = await Cart.findOne({id: id}).populate("products._id");
+            console.log("Carrito con el populate: ",carts)
+            if(carts) {
+                console.log(`Carrito con id = ${id}:`, carts);
+                return carts;
             } else {
                 console.log(`Carrito con id ${id} no encontrado`);
                 return null;
             }
+            // const cartId = carts.find(cart => cart.id === id);
+            // if (cartId) {
+            //     console.log(`Carrito con id = ${id}:`, cartId);
+            //     return cartId;
+            // } else {
+            //     console.log(`Carrito con id ${id} no encontrado`);
+            //     return null;
+            // }
         } catch (error) {
             console.error('Error al consultar carrito por ID', error);
             throw error;
         }
     };
 
-    async addProductToCart (cartId, product) {
+    async addProductToCart(cartId, product) {
         try {
-            // const carts = await Cart.find ();
-            // const cart = carts.find(cart => cart.id === cartId);
-            const cart = await Cart.findOne ({id: cartId})
-            const idUpdate =  cart._id.toString()
-            console.log("idUpdate en manager: ", idUpdate);
-            console.log(`Buscamos carrito con id ${cartId}: ` ,cart);
-            if(cart) {
-                console.log("cart.Products: ", cart.products);
-                console.log("Product en manager ", product);
+            const cart = await Cart.findOne({ id: cartId })
+            const idUpdate = cart._id.toString()
+            if (cart) {
                 const idProducto = product[0].id;
-                console.log("Product ID en manager ", idProducto);
-                const isProduct = cart.products.find(isProduct => isProduct.id === idProducto);
-                console.log("isProduct: ", isProduct, " / id del producto que mandamos por params: ",idProducto);
+                const isProduct = cart.products.find(isProduct => isProduct.id === idProducto); 
                 if (isProduct) {
                     //hacer un update
                     isProduct.quantity = isProduct.quantity + 1;
-                    console.log("Producto sumado con éxito, nuevo isProduct: ", isProduct);
                     // await fs.promises.writeFile(this.path, JSON.stringify(carts), "utf-8");
-                    const carts = await Cart.findByIdAndUpdate (idUpdate,cart, {new:true}  );
-                    console.log("cart: ", carts);
+                    const carts = await Cart.findByIdAndUpdate(idUpdate, cart, { new: true });
                     return carts;
                 } else {
-                    console.log("Hola en el else")
                     //hacer un update
                     const newproduct = {
                         id: idProducto,
-                        quantity: 1
+                        quantity: 1,
+                        _id: product[0]._id.toString(),
                     }
                     cart.products.push(newproduct);
-                    console.log("cart.Products despues de agregado: ", cart.products);
-                    console.log("Carrito con el producto agregado: ", cart);
                     // await fs.promises.writeFile(this.path, JSON.stringify(carts), "utf-8");
-                    const carts = await Cart.findByIdAndUpdate (idUpdate,cart, {new:true}  );
-                    console.log("cart: ", carts);
-                    console.log("Producto agregado con éxito");
+                    const carts = await Cart.findByIdAndUpdate(idUpdate, cart, { new: true });
                     return carts;
-                }                
+                }
             } else {
-                throw new Error (`Carrito con id ${cartId} no encontrado`);
+                throw new Error(`Carrito con id ${cartId} no encontrado`);
             }
-
         } catch (e) {
             console.error("Ocurrió un error al agregar el producto al carrito", e);
             throw e;
         };
     }
 
-}
+    //Metodo para eliminar un producto del carrito
+    async deleteProduct(cartId, productId) {
+        try {
+            const cartFind = await Cart.findOne({ id: cartId })
+            const idUpdate = cartFind._id.toString()
+            const indiceProduct = cartFind.products.findIndex(product => product.id === productId);
+            if (indiceProduct !== -1) {
+                cartFind.products.splice(indiceProduct, 1);
+                const carts = await Cart.findByIdAndUpdate(idUpdate, cartFind, { new: true });
+                return carts;
+            } else {
+                console.log('Producto no encontrado');
+            }
+        } catch (error) {
+            console.error('Error al eliminar el producto:', error);
+            throw error;
+        }
+    };
+
+    //Metodo para eliminar todos los productos del carrito
+    async deleteProducts(cartId) {
+        try {
+            const cartFind = await Cart.findOne({ id: cartId })
+            const idUpdate = cartFind._id.toString()
+            cartFind.products =[];
+            const carts = await Cart.findByIdAndUpdate(idUpdate, cartFind, { new: true });
+        } catch (error) {
+            console.error('Error al eliminar los producto:', error);
+            throw error;
+        }
+    };
+
+    async updateProducts(cartId, productUpdate) {
+        try {
+            const cartFind = await Cart.findOne({ id: cartId })
+            const idUpdate = cartFind._id.toString()
+            cartFind.products = productUpdate;
+            const carts = await Cart.findByIdAndUpdate(idUpdate, productUpdate, { new: true });
+            console.log(carts);
+        } catch (error) {
+            console.error('Error al modificar el carrito:', error);
+            throw error;
+        }
+    };
+
+    async updateProductsQuantity(cartId,productId, productUpdateQuantity) {
+        try {
+            const cartFind = await Cart.findOne({ id: cartId })
+            const idUpdate = cartFind._id.toString()
+
+            const indiceProduct = cartFind.products.findIndex(product => product.id === productId);
+            if (indiceProduct !== -1) {
+                cartFind.products[indiceProduct].quantity = productUpdateQuantity;
+                const carts = await Cart.findByIdAndUpdate(idUpdate, cartFind, { new: true });
+                return carts;
+            } else {
+                console.log('Producto no encontrado');
+            }
+
+            const carts = await Cart.findByIdAndUpdate(idUpdate, productUpdate, { new: true });
+            console.log(carts);
+        } catch (error) {
+            console.error('Error al modificar el carrito:', error);
+            throw error;
+        }
+    };
+
+};

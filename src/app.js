@@ -78,6 +78,7 @@ app.delete('/api/products/:productId',productRouterById);
 //MOSTRAMOS EL PRODUCTO EN EL HTML
 app.get('/',productRouter);
 app.get('/realTimeProducts',productRouter);
+app.get('/products',productRouter);
 
 
 //Carrito
@@ -93,8 +94,5 @@ app.use("/api/carrito", cartRouterDb);
 
 
 
-// app.listen(port, () => {
-//     console.log(`El servidor esta escuchando por el puerto ${port}`);
-// });
 
 

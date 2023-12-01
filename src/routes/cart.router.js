@@ -100,7 +100,7 @@ cartRouterDb.get('/:cid', async (req, res) => {
             res.status(404).send('Carrito no encontrado');
         }
     } catch (e) {
-        res.status(500).send('Error al leer archivo');
+        res.status(500).send('Error al buscar carrito');
     }
 });
 
@@ -124,5 +124,53 @@ cartRouterDb.post('/:cid/productos/:pid', async(req, res) => {
         res.status(500).send('Error al agregar producto al carrito');
     }
 })
+
+cartRouterDb.delete("/:cid/producto/:pid", async (req, res) => {
+    const cartId = parseInt(req.params.cid, 10);
+    const productId = parseInt(req.params.pid, 10);
+    try {
+        const cart = await cartManagerMongo.deleteProduct(cartId,productId)
+        res.status(201).json(cart);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+cartRouterDb.delete("/:cid", async (req, res) => {
+    const cartId = parseInt(req.params.cid, 10);
+    try {
+        const cart = await cartManagerMongo.deleteProducts(cartId,)
+        res.status(201).json(cart);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+cartRouterDb.put("/:cid", async (req, res) => {
+    const cartId = parseInt(req.params.cid, 10);
+    const productUpdate = req.body
+    try {
+        const cart = await cartManagerMongo.updateProducts(cartId,productUpdate)
+        res.status(201).json(cart);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+cartRouterDb.put("/:cid/productos/:pid", async (req, res) => {
+    const cartId = parseInt(req.params.cid, 10);
+    const productId = parseInt(req.params.pid, 10);
+    const productUpdateQuantity = req.body.quantity
+    console.log(productUpdateQuantity)
+    try {
+        const cart = await cartManagerMongo.updateProductsQuantity(cartId,productId,productUpdateQuantity)
+        res.status(201).json(cart);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+
+
 
 export {cartRouterDb};
