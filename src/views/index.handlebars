@@ -1,16 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{title}}</title>
-    <link rel="stylesheet" href="home.css">
-    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
-    <script type="text/javascript" src="/js/realTimeProducts.js"></script>
-</head>
-
-<body>
     <div>
         <h1>Productos en tiempo real</h1>
         
@@ -58,23 +45,9 @@
         <div>
             <h2>Listado de Productos:</h2>
             <div>
-                {{!-- {{#each product}}
-                <div class="tarjeta">
-                    <p>ID: {{this.id}}</p>
-                    <p>Titulo: {{this.title}}</p>
-                    <p>Descripción: {{this.description}}</p>
-                    <p>Código: {{this.code}}</p>
-                    <p>Precio: {{this.price}}</p>
-                    <p>Stock: {{this.stock}}</p>
-                    <p>Categoría: {{this.category}}</p>
-                </div>
-                {{/each}} --}}
                 <div class="bloque" id="productList"></div>
             </div>
         </div>
-
     </div>
+    <script type="text/javascript" src="/js/realTimeProducts.js"></script>
 
-</body>
-
-</html>

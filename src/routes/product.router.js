@@ -141,15 +141,28 @@ productRouter.get('/realTimeProducts', async (req, res) => {
 productRouter.get('/products', async (req, res) => {
     try {
         const { limit = 10, page = 1, sort, category, available} = req.query;
-        const products = await productManagerMongo.getProductPaginate(page, limit, sort,category, available);
-        console.log("Productos desde el manager",products);
-        res.render('layouts/products', {
-            product: products,
-            title: "Listado de Productos"
+        const product = await productManagerMongo.getProductPaginate(page, limit, sort,category, available);
+        console.log("Producto desde router: ",product);
+        res.render('products', {
+            title: "Listado de Productos por DB",
+            product
         })
     } catch (e) {
         console.log(e);
         res.status(500).send('Error al leer archivo');
+    }
+});
+
+productRouter.get('/products/:id', async (req, res) => {
+    try {
+        console.log("id: ",req.params.id)
+        const products = await productManagerMongo.getProductById(req.params.id);
+        res.render('productDetail', {
+            product: products,
+            title: "Producto Detallado"
+        })
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
 });
 

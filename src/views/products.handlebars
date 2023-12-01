@@ -1,0 +1,23 @@
+<div>
+    <h1>Listado de Productos por db:</h1>
+    <div class="bloque">
+        {{#each product.docs}}
+        <div class="tarjeta">
+            <p>Titulo: {{lookup this 'title'}}</p>
+            <p>Precio: {{lookup this 'price'}}</p>
+            <p>Stock: {{lookup this 'stock'}}</p>
+            <p>Categoría: {{lookup this 'category'}}</p>
+            <a href="/products/{{lookup this 'id'}}">Ver Producto</a>
+            <a href="api/carrito/1/productos/{{lookup this 'id'}}">Agregar al carrito</a>
+        </div>
+        {{/each}}
+    </div>
+    <div>
+        {{#if productos.prevPage}}
+        <a href="/products?page={{products.prevPage}}">Página Anterior</a>
+        {{/if}}
+        {{#if productos.nextPage}}
+        <a href="/products?page={{products.nextPage}}">Página Siguiente</a>
+        {{/if}}
+    </div>
+</div>
