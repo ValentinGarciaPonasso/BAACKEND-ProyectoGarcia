@@ -170,6 +170,26 @@ cartRouterDb.put("/:cid/productos/:pid", async (req, res) => {
     }
 });
 
+//MOSTRAMOS PRODUCTOS EN PANTALLA
+cartRouterDb.get('/carts/:cid', async (req, res) => {
+    const id = parseInt(req.params.cid, 10);
+    try {
+        const cart = await cartManagerMongo.getCartById(id);
+        if (cart) {
+            let products = cart.products;
+            res.render('cartDetail', {
+                id: cart.id,
+                products: products
+            })
+        } else {
+            res.status(404).send('Carrito no encontrado');
+        }
+    } catch (e) {
+        res.status(500).send('Error al buscar carrito');
+    }
+});
+
+
 
 
 

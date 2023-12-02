@@ -1,0 +1,22 @@
+<div>
+    <h1>Carrito ID: {{id}}</h1>
+    <div class="bloque">
+        {{#each products}}
+        <div class="tarjeta">
+            {{#with (lookup this '_id')}}
+                <p>Titulo: {{title}}</p>
+                <p>Precio: {{price}}</p>
+                <p>Stock: {{stock}}</p>
+                <p>Categoría: {{category}}</p>
+            {{/with}}
+            <p>Id: {{this.id}}</p>
+            <p>Cantidad: {{this.quantity}}</p>
+            <a href="/products/{{this.id}}">Ver Producto</a>
+            <button type="submit" class="addToCart" value="{{this.id}}">Quitar del carrito</button>
+        </div>
+        {{/each}}
+    </div>
+    <a href="/products/">Volver</a>
+</div>
+
+{{!-- <script type="text/javascript" src="/js/product.js"></script> --}}

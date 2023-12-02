@@ -54,7 +54,6 @@ export default class ProductManager {
         try {
             const data = await fs.promises.readFile(this.path, "utf-8");
             const productos = JSON.parse(data);
-            console.log("Productos: ", productos);
             return productos;
         } catch (e) {
             console.error("Error al consultar productos", e)

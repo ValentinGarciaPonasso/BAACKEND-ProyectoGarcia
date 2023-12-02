@@ -52,7 +52,6 @@ export default class ProductManagerMongo {
     async getProduct() {
         try {
             const products = await Products.find ();
-            console.log("Productos: ", products);
             return products;
         } catch (e) {
             console.error("Error al consultar productos", e)
@@ -84,9 +83,7 @@ export default class ProductManagerMongo {
                     query.available = available
                 }
             };
-            console.log(query);
             const products = await Products.paginate(query, options);
-            console.log("Productos: ", products);
             return products
         } catch (e) {
             console.error("Error al consultar productos", e)
@@ -98,7 +95,6 @@ export default class ProductManagerMongo {
     async getProductById(idFind) {
         try {
             const products = await Products.find ({id: idFind});
-            console.log("Productos: ", products);
             return products;
         } catch (e) {
             console.error("Error al consultar productos", e)

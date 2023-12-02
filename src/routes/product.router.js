@@ -142,6 +142,8 @@ productRouter.get('/products', async (req, res) => {
     try {
         const { limit = 10, page = 1, sort, category, available} = req.query;
         const product = await productManagerMongo.getProductPaginate(page, limit, sort,category, available);
+        product.prevLink = product.hasPrevPage?`http://localhost:8080/products/?page=${product.prevPage}`:'';
+        product.nextLink = product.hasNextPage?`http://localhost:8080/products/?page=${product.nextPage}`:'';
         console.log("Producto desde router: ",product);
         res.render('products', {
             title: "Listado de Productos por DB",
@@ -155,11 +157,10 @@ productRouter.get('/products', async (req, res) => {
 
 productRouter.get('/products/:id', async (req, res) => {
     try {
-        console.log("id: ",req.params.id)
-        const products = await productManagerMongo.getProductById(req.params.id);
+        const product = await productManagerMongo.getProductById(req.params.id);
         res.render('productDetail', {
-            product: products,
-            title: "Producto Detallado"
+            titulo: product[0].title,
+            product
         })
     } catch (error) {
         res.status(500).json({ message: error.message });

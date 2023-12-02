@@ -7,6 +7,7 @@ import http from 'http';
 import { Server } from 'socket.io';
 import ProductManager from "./dao/ProductManager.js";
 import ProductManagerMongo from "./dao/ProductManagerMongo.js";
+import CartManagerMongo from './dao/CartManagerMongo.js';
 import { uploader } from './utilitis.js';
 import { db } from "./config/databse.js";
 import Handlebars from 'handlebars';
@@ -18,17 +19,24 @@ const app = express();
 
 const productManager = new ProductManager('./Productos.json');
 const productManagerMongo = new ProductManagerMongo();
+const cartManagerMongo = new CartManagerMongo();
 
 //Estructura Handlebars
-app.engine('handlebars', handlebars.engine());
+const hbs = handlebars.create({
+    defaultLayout: 'main', // Reemplaza 'main' con tu diseño predeterminado
+    extname: '.handlebars', // Reemplaza '.handlebars' con tu extensión de archivo
+    runtimeOptions: {
+        allowProtoPropertiesByDefault: true,
+        allowProtoMethodsByDefault: true,
+    },
+});
+app.engine('handlebars', hbs.engine);
+// app.engine('handlebars', handlebars.engine());
 app.set('views', `${_dirname}/views`);
 app.set('view engine', 'handlebars');
 //Archivos Estaticos
 app.use(express.static('src/public'));
 
-Handlebars.registerHelper('lookup', function(obj, field) {
-    return obj[field];
-  });
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
@@ -69,9 +77,25 @@ io.on('connection', async (socket) => {
             const productos = await productManagerMongo.getProduct();
             io.emit("productoActualizado", productos);
         } catch (e) {
-            console.error("Error al eliminar producto:", error);
+            console.error("Error al eliminar producto:", e);
         };
     });
+    socket.on("cartUpdated", async (productAddedId) => {
+        try {
+            const product = await productManagerMongo.getProductById(productAddedId);
+            console.log(`Buscamos producto con id ${productAddedId}: `, product);
+            if (product) {
+                //de momento hardcodeo el cartId
+                let cartId = 1;
+                await cartManagerMongo.addProductToCart(cartId, product);
+                console.log("producto agregado")
+            } else {
+                console.log("No se encontró producto")
+            }
+        } catch (e) {
+            console.error("Error al agregar producto:", e);
+        };
+    })
 });
 
 
@@ -87,6 +111,7 @@ app.get('/', productRouter);
 app.get('/realTimeProducts', productRouter);
 app.get('/products', productRouter);
 app.get('/products/:id', productRouter);
+app.get('/carts/:cid', cartRouterDb);
 
 
 //Carrito

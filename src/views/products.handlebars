@@ -3,21 +3,23 @@
     <div class="bloque">
         {{#each product.docs}}
         <div class="tarjeta">
-            <p>Titulo: {{lookup this 'title'}}</p>
+            <p>Titulo: {{this.title}}</p>
             <p>Precio: {{lookup this 'price'}}</p>
             <p>Stock: {{lookup this 'stock'}}</p>
             <p>Categoría: {{lookup this 'category'}}</p>
             <a href="/products/{{lookup this 'id'}}">Ver Producto</a>
-            <a href="api/carrito/1/productos/{{lookup this 'id'}}">Agregar al carrito</a>
+            <button type="submit" id="addToCart" class="addToCart" value={{lookup this 'id'}}>Agregar al carrito</button>
         </div>
         {{/each}}
     </div>
     <div>
-        {{#if productos.prevPage}}
-        <a href="/products?page={{products.prevPage}}">Página Anterior</a>
+        {{#if product.prevPage}}
+        <a href={{product.prevLink}}>Página Anterior</a>
         {{/if}}
-        {{#if productos.nextPage}}
-        <a href="/products?page={{products.nextPage}}">Página Siguiente</a>
+        {{#if product.nextPage}}
+        <a href={{product.nextLink}}>Página Siguiente</a>
         {{/if}}
     </div>
 </div>
+
+<script type="text/javascript" src="/js/product.js"></script>

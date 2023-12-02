@@ -58,7 +58,9 @@ export default class CartManagerMongo {
 
     async addProductToCart(cartId, product) {
         try {
+            console.log(cartId);
             const cart = await Cart.findOne({ id: cartId })
+            console.log(cart);
             const idUpdate = cart._id.toString()
             if (cart) {
                 const idProducto = product[0].id;
