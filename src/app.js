@@ -1,6 +1,10 @@
 import express from 'express';
 import { productRouter, productRouterById, productRouterDb } from './routes/product.router.js';
-import { cartRouter, cartRouterById, cartRouterDb } from './routes/cart.router.js';
+import { cartRouter, cartRouterById, cartRouterDb} from './routes/cart.router.js';
+import loginRouter from './routes/login.js';
+import registerRouter from './routes/register.js';
+import profileRouter from  './routes/profile.js';
+import sessionRouter from './routes/session.js';
 import _dirname from './utilitis.js';
 import handlebars from 'express-handlebars';
 import http from 'http';
@@ -8,6 +12,10 @@ import { Server } from 'socket.io';
 import ProductManager from "./dao/ProductManager.js";
 import ProductManagerMongo from "./dao/ProductManagerMongo.js";
 import CartManagerMongo from './dao/CartManagerMongo.js';
+import cookieParser from 'cookie-parser';
+import MongoStore from 'connect-mongo';
+import session from 'express-session';
+import FileStore from 'session-file-store';
 import { uploader } from './utilitis.js';
 import { db } from "./config/databse.js";
 import Handlebars from 'handlebars';
@@ -40,6 +48,19 @@ app.use(express.static('src/public'));
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
+
+app.use(cookieParser());
+
+app.use(session({
+    secret: 'CoderSecret', 
+    resave: false, 
+    saveUninitialized: true, 
+    store: MongoStore.create({
+        mongoUrl:"mongodb+srv://vgarciaponasso:Va.le4495@ecommerce.stekczn.mongodb.net/?retryWrites=true&w=majority",
+
+        ttl: 2 * 60, // Tiempo de vida de la sesión en segundos (2 minutos en este caso)
+    }),
+}));
 
 //SERVER PARA WEBSOCKET
 const server = app.listen(port, () => {
@@ -124,6 +145,12 @@ app.post('/api/carts/:cid/product/:pid', cartRouterById);
 ////MONGO
 app.use("/api/productos", productRouterDb);
 app.use("/api/carrito", cartRouterDb);
+
+///USUARIOS
+app.use('/login', loginRouter);
+app.use('/register', registerRouter);
+app.use('/profile', profileRouter);
+app.use('/sessions', sessionRouter);
 
 
 
