@@ -6,7 +6,7 @@ const sessionRouter = express.Router ();
 
 sessionRouter.post("/register", registerUser);
 sessionRouter.post("/login", loginUser);
-sessionRouter.post("/logout", logOut);
 sessionRouter.post("/profile", showProfile);
+sessionRouter.get("/", logOut);
 
 export default sessionRouter;

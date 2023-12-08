@@ -1,25 +1,41 @@
 <div>
-    <h1>Listado de Productos por db:</h1>
-    <div class="bloque">
-        {{#each product.docs}}
-        <div class="tarjeta">
-            <p>Titulo: {{this.title}}</p>
-            <p>Precio: {{lookup this 'price'}}</p>
-            <p>Stock: {{lookup this 'stock'}}</p>
-            <p>Categoría: {{lookup this 'category'}}</p>
-            <a href="/products/{{lookup this 'id'}}">Ver Producto</a>
-            <button type="submit" id="addToCart" class="addToCart" value={{lookup this 'id'}}>Agregar al carrito</button>
-        </div>
-        {{/each}}
+    <h1>Productos</h1>
+    <div>
+        <h2>User Profile</h2>
+        {{#if user}}
+        <p>Bienvenido, {{user.name}}!</p>
+        <p>Email: {{user.email}}</p>
+        <a href="/logout" title="logout">Logout</a>
+        {{#if user.admin}}
+        <a href="/realTimeProducts" title="logout">Administracion de productos</a>
+        {{/if}}
+        {{else}}
+        <p>El usuario no se encuentra logeado</p>
+        {{/if}}
     </div>
     <div>
-        {{#if product.prevPage}}
-        <a href={{product.prevLink}}>Página Anterior</a>
-        {{/if}}
-        {{#if product.nextPage}}
-        <a href={{product.nextLink}}>Página Siguiente</a>
-        {{/if}}
+        <h2>Listado de Productos:</h2>
+        <div class="bloque">
+            {{#each product.docs}}
+            <div class="tarjeta">
+                <p>Titulo: {{this.title}}</p>
+                <p>Precio: {{lookup this 'price'}}</p>
+                <p>Stock: {{lookup this 'stock'}}</p>
+                <p>Categoría: {{lookup this 'category'}}</p>
+                <a href="/products/{{lookup this 'id'}}">Ver Producto</a>
+                <button type="submit" id="addToCart" class="addToCart" value={{lookup this 'id' }}>Agregar al
+                    carrito</button>
+            </div>
+            {{/each}}
+        </div>
+        <div>
+            {{#if product.prevPage}}
+            <a href={{product.prevLink}}>Página Anterior</a>
+            {{/if}}
+            {{#if product.nextPage}}
+            <a href={{product.nextLink}}>Página Siguiente</a>
+            {{/if}}
+        </div>
     </div>
 </div>
-
 <script type="text/javascript" src="/js/product.js"></script>

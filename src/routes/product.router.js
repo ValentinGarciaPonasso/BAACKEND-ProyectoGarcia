@@ -113,7 +113,7 @@ productRouter.post('/api/products', async (req, res) => {
 productRouter.get('/', async (req, res) => {
     try {
         const product = await productManager.getProduct();
-        console.log(product);
+        console.log("hola");
         res.render('home', {
             product: product,
             title: "Listado de Productos"
@@ -146,7 +146,8 @@ productRouter.get('/products', async (req, res) => {
         product.nextLink = product.hasNextPage?`http://localhost:8080/products/?page=${product.nextPage}`:'';
         console.log("Producto desde router: ",product);
         res.render('products', {
-            title: "Listado de Productos por DB",
+            user: req.session,
+            title: "Listado de Productos",
             product
         })
     } catch (e) {

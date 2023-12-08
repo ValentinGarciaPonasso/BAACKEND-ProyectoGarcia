@@ -9,6 +9,10 @@ const userSchema = new Schema ({
     email: String,
     age: Number,
     password: String,   ////scha 512 o scha 256
+    admin: {
+        type: Boolean,
+        default: false
+    }
 });
 
 const userModel = model(userCollection, userSchema);

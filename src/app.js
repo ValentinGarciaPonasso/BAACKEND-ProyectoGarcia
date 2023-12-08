@@ -58,7 +58,7 @@ app.use(session({
     store: MongoStore.create({
         mongoUrl:"mongodb+srv://vgarciaponasso:Va.le4495@ecommerce.stekczn.mongodb.net/?retryWrites=true&w=majority",
 
-        ttl: 2 * 60, // Tiempo de vida de la sesión en segundos (2 minutos en este caso)
+        ttl: 2 * 60, 
     }),
 }));
 
@@ -128,7 +128,7 @@ app.post('/api/products', productRouter);
 app.put('/api/products/:productId', productRouterById);
 app.delete('/api/products/:productId', productRouterById);
 //MOSTRAMOS EL PRODUCTO EN EL HTML
-app.get('/', productRouter);
+// app.get('/', productRouter);
 app.get('/realTimeProducts', productRouter);
 app.get('/products', productRouter);
 app.get('/products/:id', productRouter);
@@ -147,10 +147,17 @@ app.use("/api/productos", productRouterDb);
 app.use("/api/carrito", cartRouterDb);
 
 ///USUARIOS
-app.use('/login', loginRouter);
+app.use('/', loginRouter);
+// app.use('/login', loginRouter);
 app.use('/register', registerRouter);
 app.use('/profile', profileRouter);
-app.use('/sessions', sessionRouter);
+app.use('/api/sessions', sessionRouter);
+app.use('/logout', sessionRouter);
+
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Algo salió mal!');
+});
 
 
 

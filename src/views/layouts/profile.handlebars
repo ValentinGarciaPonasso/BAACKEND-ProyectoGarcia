@@ -1,12 +1,8 @@
-<div class="container">
-    <div class="row">
-        <div class="col-md-6">
-            <h2>{{title}}</h2>
-            <form action="{{actionLogin}}" method="post">
-                <input type="email" name="email_login" placeholder="email">
-                <input type="password" name="password_login" placeholder="password">
-                <input type="submit" value="{{submitLabel}}">
-            </form>
-        </div>
-    </div>
-</div>
+<h2>User Profile</h2>
+{{#if user}}
+    <p>Bienvenido, {{user.name}}!</p>
+    <p>Email: {{user.email}}</p>
+    <a href="/logout" title="logout">Logout</a>
+{{else}}
+    <p>El usuario no se encuentra logeado</p>
+{{/if}}
