@@ -12,7 +12,7 @@ sessionRouter.post("/logout", logOut);
 
 sessionRouter.post(
     "/register",
-    passport.authenticate("register", { failureRedirect: "/failregister" }),
+    passport.authenticate("register", { failureRedirect: "/" }),
     async (req, res) => {
         let user = req.user;
         delete user.password;
@@ -41,5 +41,28 @@ sessionRouter.post(
         res.redirect("/products");
     }
 );
+
+///CONEXION CON GITHUB:
+
+sessionRouter.get(
+    "/github",
+    passport.authenticate("github", { scope: ["user: email"] }),
+    async (req, res) => { }
+);
+
+
+sessionRouter.get(
+    "/githubcallback",
+    passport.authenticate("github", { failureRedirect: "/" }),
+    async (req, res) => {
+        let user = req.user;
+        console.log("Usuario desde Session: ", user);
+        req.session.name = user.first_name;
+        req.session.email = user.email;
+        req.session.admin = user.admin;
+        console.log("Usuario autenticado:", req.session);
+        res.redirect("/products");
+    }
+)
 
 export default sessionRouter;

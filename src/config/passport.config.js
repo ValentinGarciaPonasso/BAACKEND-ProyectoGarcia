@@ -72,15 +72,19 @@ const initializePassport = () => {
                 try {
                     console.log(profile);
                     let user = await userModel.findOne({ email: profile._json.email });     ///traemos el user
-                    if (!user) {                                                             /// si no ecioste lo creamos
+                    if (!user) {                                                             /// si no existe lo creamos
                         let newUser = {
-                            name: profile._json.name,
+                            first_name: profile._json.name,
+                            last_name: "GihubNull",
                             email: profile._json.email,
+                            age: 9999,
                             password: "",
                         };
                         let result = await userModel.create(newUser);
+                        console.log("Resultado: " + result);
                         done(null, result);
                     } else {
+                        console.log("Usuario: " + user);
                         done(null, user);                                                       /// si existe lo devolvemos
                     };
                 } catch (err) {
