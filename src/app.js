@@ -6,6 +6,7 @@ import registerRouter from './routes/register.js';
 import profileRouter from  './routes/profile.js';
 import sessionRouter from './routes/session.js';
 import _dirname from './utilitis.js';
+import "dotenv/config.js";
 import handlebars from 'express-handlebars';
 import http from 'http';
 import { Server } from 'socket.io';
@@ -19,6 +20,8 @@ import FileStore from 'session-file-store';
 import { uploader } from './utilitis.js';
 import { db } from "./config/databse.js";
 import Handlebars from 'handlebars';
+import passport from "passport";
+import initializePassport from "./config/passport.config.js";
 
 const port = 8080;
 const app = express();
@@ -52,11 +55,11 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use(session({
-    secret: 'CoderSecret', 
+    secret: process.env.hash,
     resave: false, 
     saveUninitialized: true, 
     store: MongoStore.create({
-        mongoUrl:"mongodb+srv://vgarciaponasso:Va.le4495@ecommerce.stekczn.mongodb.net/?retryWrites=true&w=majority",
+        mongoUrl: process.env.mongo,
 
         ttl: 2 * 60, 
     }),
@@ -120,6 +123,11 @@ io.on('connection', async (socket) => {
 });
 
 
+///Passport
+initializePassport();
+app.use(passport.initialize());
+app.use(passport.session());
+
 
 //Productos
 app.get('/api/products', productRouter);
@@ -152,7 +160,6 @@ app.use('/', loginRouter);
 app.use('/register', registerRouter);
 app.use('/profile', profileRouter);
 app.use('/api/sessions', sessionRouter);
-app.use('/logout', sessionRouter);
 
 app.use((err, req, res, next) => {
     console.error(err.stack);

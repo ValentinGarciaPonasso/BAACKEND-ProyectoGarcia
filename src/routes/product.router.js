@@ -145,6 +145,7 @@ productRouter.get('/products', async (req, res) => {
         product.prevLink = product.hasPrevPage?`http://localhost:8080/products/?page=${product.prevPage}`:'';
         product.nextLink = product.hasNextPage?`http://localhost:8080/products/?page=${product.nextPage}`:'';
         console.log("Producto desde router: ",product);
+        console.log("Usuario autenticado  en products:", req.session);
         res.render('products', {
             user: req.session,
             title: "Listado de Productos",
