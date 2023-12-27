@@ -7,7 +7,11 @@ profileRouter.get('/', (req, res)  => {
     let data = {
         layout: "profile",
         user: req.session,
+        admin: false,
     };
+    if (req.session.role === 'admin') {
+        data.admin = true;
+    }
     res.render('index', data);
 });
 

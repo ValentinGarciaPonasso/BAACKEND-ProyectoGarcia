@@ -146,8 +146,14 @@ productRouter.get('/products', async (req, res) => {
         product.nextLink = product.hasNextPage?`http://localhost:8080/products/?page=${product.nextPage}`:'';
         console.log("Producto desde router: ",product);
         console.log("Usuario autenticado  en products:", req.session);
+        let admin = false;
+        if (req.session.role === 'admin') {
+            admin = true;
+        }
+        console.log("admin: ", admin);
         res.render('products', {
             user: req.session,
+            admin: admin,
             title: "Listado de Productos",
             product
         })

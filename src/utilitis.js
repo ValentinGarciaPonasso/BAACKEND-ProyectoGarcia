@@ -2,6 +2,9 @@ import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import multer from 'multer';
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import "dotenv/config.js";
+import passport from "passport";
 
 export const createHash = (password) =>
     bcrypt.hashSync(password, bcrypt.genSaltSync(10));
@@ -28,3 +31,27 @@ const _filename = fileURLToPath(import.meta.url);
 const _dirname = dirname(_filename);
 
 export default _dirname;
+
+
+////AGREGAMOS JWT
+const PRIVATE_KEY = process.env.KEYSECRET;
+
+export const generateToken = (user) => {
+    const token = jwt.sign({ user }, PRIVATE_KEY, { expiresIn: "1d" });
+    return token;
+};
+
+export const passportCall = (strategy) => {
+    return async (req, res, next) => {
+        passport.authenticate(strategy, function (err, user, info) {
+            if (err) return next(err);
+            if (!user) {
+                return res
+                    .status(401)
+                    .send({ error: info.messages?.info, messages: info.toString() });
+            }
+            req.user = user;
+            next();
+        })(req, res, next);
+    };
+};

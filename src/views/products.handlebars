@@ -9,7 +9,7 @@
         <form action="/api/sessions/logout/" method="post" id="logoutForm">
             <button type="submit" title="logout">Logout</button>
         </form>
-        {{#if user.admin}}
+        {{#if admin}}
         <a href="/realTimeProducts" title="admin">Administracion de productos</a>
         {{/if}}
         {{else}}

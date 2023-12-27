@@ -9,7 +9,7 @@ mongoose.connect(URL, {})
 
 const db = mongoose.connection;
 
-db.on("error", console.error.bind(console, 'Error de conexiona  la base de datos'));
+db.on("error", console.error.bind(console, 'Error de conexion a  la base de datos'));
 db.once('open', () => {
     console.log('Conectado a la base de datos');
 });

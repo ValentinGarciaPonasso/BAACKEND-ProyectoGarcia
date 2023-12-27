@@ -9,14 +9,16 @@ const userSchema = new Schema ({
     email: String,
     age: Number,
     password: String,   ////scha 512 o scha 256
-    admin: {
-        type: Boolean,
-        default: false
-    }
+    role: {
+        type: String,
+        default: "user",
+    },
+    cart: Number,
 });
 
 const userModel = model(userCollection, userSchema);
 
 export default userModel;
 
-
+//////
+// AGREGAR CAMPO CART Y CAMBIAR ADMIN POR ROL

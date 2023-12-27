@@ -18,7 +18,7 @@ sessionRouter.post(
         delete user.password;
         req.session.name = user.first_name;
         req.session.email = user.email;
-        req.session.admin = user.admin;
+        req.session.role = user.role;
         console.log("Usuario registrado:", req.session);
         res.redirect("/products");
     }
@@ -36,7 +36,7 @@ sessionRouter.post(
         delete user.password;
         req.session.name = user.first_name;
         req.session.email = user.email;
-        req.session.admin = user.admin;
+        req.session.role = user.role;
         console.log("Usuario autenticado:", req.session);
         res.redirect("/products");
     }
@@ -59,7 +59,7 @@ sessionRouter.get(
         console.log("Usuario desde Session: ", user);
         req.session.name = user.first_name;
         req.session.email = user.email;
-        req.session.admin = user.admin;
+        req.session.role = user.role;
         console.log("Usuario autenticado:", req.session);
         res.redirect("/products");
     }
