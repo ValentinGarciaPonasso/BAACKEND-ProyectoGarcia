@@ -1,6 +1,7 @@
 import express from 'express';
 import ProductManager from "../dao/ProductManager.js";
 import ProductManagerMongo from "../dao/ProductManagerMongo.js";
+import { passportCall, createHash, generateToken, isValidPassword } from '../utilitis.js';
 import { uploader } from '../utilitis.js';
 import Products from '../dao/models/product.models.js';
 
@@ -138,21 +139,22 @@ productRouter.get('/realTimeProducts', async (req, res) => {
     }
 });
 
-productRouter.get('/products', async (req, res) => {
+productRouter.get('/products',passportCall ('jwt'), async (req, res) => {
+    let userData = req.user.user;
     try {
         const { limit = 10, page = 1, sort, category, available} = req.query;
         const product = await productManagerMongo.getProductPaginate(page, limit, sort,category, available);
         product.prevLink = product.hasPrevPage?`http://localhost:8080/products/?page=${product.prevPage}`:'';
         product.nextLink = product.hasNextPage?`http://localhost:8080/products/?page=${product.nextPage}`:'';
         console.log("Producto desde router: ",product);
-        console.log("Usuario autenticado  en products:", req.session);
+        console.log("Usuario autenticado  en products:", userData);
         let admin = false;
-        if (req.session.role === 'admin') {
+        if (userData.role === 'admin') {
             admin = true;
         }
         console.log("admin: ", admin);
         res.render('products', {
-            user: req.session,
+            user: userData,
             admin: admin,
             title: "Listado de Productos",
             product

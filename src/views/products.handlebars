@@ -3,7 +3,7 @@
     <div>
         <h2>User Profile</h2>
         {{#if user}}
-        <p>Bienvenido, {{user.name}}!</p>
+        <p>Bienvenido, {{user.first_name}}!</p>
         <p>Email: {{user.email}}</p>
         {{!-- <a href="/api/sessions/logout/" title="logout">Logout</a> --}}
         <form action="/api/sessions/logout/" method="post" id="logoutForm">

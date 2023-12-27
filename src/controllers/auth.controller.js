@@ -27,7 +27,6 @@ export const loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
         const user = await userModel.findOne({ email });
-        // const user = await userModel.findOne({ email, password });
         if (isValidPassword(user, password)) {
             req.session.name = user.first_name;
             req.session.email = user.email;

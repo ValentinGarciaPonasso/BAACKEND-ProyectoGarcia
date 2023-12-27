@@ -1,0 +1,20 @@
+<div>
+    <h1>{{title}}</h1>
+    <div>
+        <h2>Usuario:</h2>
+        {{#if user}}
+        <p>Bienvenido, {{user.first_name}} {{user.last_name}}!</p>
+        <p>Email: {{user.email}}</p>
+        <p>Edad: {{user.age}}</p>
+        <a href="/products" title="products">Ver Productos</a>
+        {{#if admin}}
+        <a href="/realTimeProducts" title="admin">Administracion de productos</a>
+        {{/if}}
+        <form action="/api/sessions/logout/" method="post" id="logoutForm">
+            <button type="submit" title="logout">Logout</button>
+        </form>
+        {{else}}
+        <p>El usuario no se encuentra logeado</p>
+        {{/if}}
+    </div>
+</div>

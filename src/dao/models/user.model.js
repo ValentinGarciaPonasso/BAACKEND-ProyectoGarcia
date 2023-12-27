@@ -20,5 +20,3 @@ const userModel = model(userCollection, userSchema);
 
 export default userModel;
 
-//////
-// AGREGAR CAMPO CART Y CAMBIAR ADMIN POR ROL
