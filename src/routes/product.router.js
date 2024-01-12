@@ -1,9 +1,9 @@
 import express from 'express';
-import ProductManager from "../dao/ProductManager.js";
-import ProductManagerMongo from "../dao/ProductManagerMongo.js";
+import ProductManager from "../persistence/ProductManager.js";
+import ProductManagerMongo from "../persistence/ProductManagerMongo.js";
 import { passportCall, createHash, generateToken, isValidPassword } from '../utilitis.js';
 import { uploader } from '../utilitis.js';
-import Products from '../dao/models/product.models.js';
+import Products from '../persistence/models/product.models.js';
 
 
 const productRouter = express.Router();

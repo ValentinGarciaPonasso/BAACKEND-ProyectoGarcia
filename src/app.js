@@ -10,9 +10,9 @@ import "dotenv/config.js";
 import handlebars from 'express-handlebars';
 import http from 'http';
 import { Server } from 'socket.io';
-import ProductManager from "./dao/ProductManager.js";
-import ProductManagerMongo from "./dao/ProductManagerMongo.js";
-import CartManagerMongo from './dao/CartManagerMongo.js';
+import ProductManager from "./persistence/ProductManager.js";
+import ProductManagerMongo from "./persistence/ProductManagerMongo.js";
+import CartManagerMongo from './persistence/CartManagerMongo.js';
 import cookieParser from 'cookie-parser';
 import MongoStore from 'connect-mongo';
 import session from 'express-session';
@@ -130,11 +130,11 @@ app.use(passport.session());
 
 
 //Productos
-app.get('/api/products', productRouter);
-app.get('/api/products/:productId', productRouterById);
-app.post('/api/products', productRouter);
-app.put('/api/products/:productId', productRouterById);
-app.delete('/api/products/:productId', productRouterById);
+// app.get('/api/products', productRouter);
+// app.get('/api/products/:productId', productRouterById);
+// app.post('/api/products', productRouter);
+// app.put('/api/products/:productId', productRouterById);
+// app.delete('/api/products/:productId', productRouterById);
 //MOSTRAMOS EL PRODUCTO EN EL HTML
 // app.get('/', productRouter);
 app.get('/realTimeProducts', productRouter);
@@ -144,9 +144,9 @@ app.get('/carts/:cid', cartRouterDb);
 
 
 //Carrito
-app.post('/api/carts', cartRouter);
-app.get('/api/carts/:cid', cartRouterById);
-app.post('/api/carts/:cid/product/:pid', cartRouterById);
+// app.post('/api/carts', cartRouter);
+// app.get('/api/carts/:cid', cartRouterById);
+// app.post('/api/carts/:cid/product/:pid', cartRouterById);
 
 
 
@@ -157,8 +157,8 @@ app.use("/api/carrito", cartRouterDb);
 ///USUARIOS
 app.use('/', loginRouter);
 // app.use('/login', loginRouter);
-app.use('/register', registerRouter);
-app.use('/profile', profileRouter);
+// app.use('/register', registerRouter);
+// app.use('/profile', profileRouter);
 app.use('/api/sessions', sessionRouter);
 
 app.use((err, req, res, next) => {

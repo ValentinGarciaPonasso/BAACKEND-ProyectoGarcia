@@ -1,4 +1,4 @@
-import userModel from "../dao/models/user.model.js";
+import userModel from "../persistence/models/user.model.js";
 import { createHash, isValidPassword } from "../utilitis.js";
 
 
