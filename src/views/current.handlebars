@@ -6,9 +6,9 @@
         <p>Bienvenido, {{user.first_name}} {{user.last_name}}!</p>
         <p>Email: {{user.email}}</p>
         <p>Edad: {{user.age}}</p>
-        <a href="/products" title="products">Ver Productos</a>
+        <a href="/api/products" title="products">Ver Productos</a>
         {{#if admin}}
-        <a href="/realTimeProducts" title="admin">Administracion de productos</a>
+        <a href="/api/productos/realTimeProducts" title="admin">Administracion de productos</a>
         {{/if}}
         <form action="/api/sessions/logout/" method="post" id="logoutForm">
             <button type="submit" title="logout">Logout</button>

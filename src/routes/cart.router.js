@@ -1,8 +1,9 @@
 import express from 'express';
-import CartManager from "../persistence/CartManager.js";
-import ProductManager from '../persistence/ProductManager.js';
-import ProductManagerMongo from "../persistence/ProductManagerMongo.js";
-import CartManagerMongo from '../persistence/CartManagerMongo.js';
+import CartManager from "../dao/CartManager.js";
+import ProductManager from '../dao/ProductManager.js';
+import ProductManagerMongo from "../dao/ProductManagerMongo.js";
+import CartManagerMongo from '../dao/CartManagerMongo.js';
+import { passportCall} from "../utilitis.js";
 
 const cartRouter = express.Router();
 const cartRouterById = express.Router();
@@ -73,6 +74,21 @@ cartRouterById.post('/api/carts/:cid/product/:pid', async(req, res) => {
 })
 
 export {cartRouterById};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ///MONGO
 
@@ -189,8 +205,11 @@ cartRouterDb.get('/carts/:cid', async (req, res) => {
     }
 });
 
-
-
-
-
 export {cartRouterDb};
+
+
+
+
+
+
+

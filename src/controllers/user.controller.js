@@ -1,8 +1,12 @@
 import * as userServices from "../services/user.service.js"
-// import * as cartServices from "../services/carts.service.js"
+import {Router} from "express";
 import "dotenv/config.js";
 import { passportCall, createHash, generateToken, isValidPassword } from "../utilitis.js";
+import passport from "passport";
+import { logOut} from '../controllers/auth.controller.js';
 
+
+const router = new Router();
 
 const showProfile = (req, res) => {
     const { user } = req.session.user;
@@ -11,9 +15,9 @@ const showProfile = (req, res) => {
 
 export { showProfile };
 
-///////////////////////////////////////////////
 
-const registerUser = async (req, res) => {
+//Register
+router.post("/register", async (req, res) => {
     try {
         const { first_name, last_name, email, age, password } = req.body;
 
@@ -22,7 +26,7 @@ const registerUser = async (req, res) => {
                 .status(400)
                 .send({ status: "Error", Error: "Uno o varios datos incompletos" })
 
-        let findUser = await userServices.getUser(email);
+        let findUser = await userServices.getOne(email);
         let newUser = null;
         if (findUser) {
             return res.status(400).send({
@@ -37,16 +41,28 @@ const registerUser = async (req, res) => {
                 age: age,
                 password: createHash(password)
             };
-            let result = await userServices.addUser(newUser)
+            let result = await userServices.create(newUser)
         }
-        res.redirect("/api/sessions/current");
+        let user = await userServices.getOne(email)
+        console.log("prueba de user" + user)
+        let token = generateToken(user);
+        res
+        .cookie("access_token", token, {
+            maxAge: 60 * 60 * 1000,
+            httpOnly: true,
+        })
+        .redirect('/api/cart/createCart');
     } catch (error) {
         console.log(error)
         return res.redirect("/");
     }
-};
+});
 
-const loginUser = async (req, res) => {
+//Login
+
+
+
+router.post ("/login", async (req, res) => {
     try {
         const { email, password } = req.body;
         ///condicional para superadmin
@@ -67,7 +83,7 @@ const loginUser = async (req, res) => {
                 })
                 .redirect("/api/sessions/current");
         }else {
-            let user = await userServices.getUser(email)
+            let user = await userServices.getOne(email)
             console.log("Usuario desde sesion: " + user);
             if (!user)
                 return res.status(401).send({
@@ -94,7 +110,53 @@ const loginUser = async (req, res) => {
         console.log("Error credenciales inválidas", error);
         return res.redirect("/");
     }
-}
+});
+
+//Logut(hacer se encuentra a medias)
+
+router.post("/logout", logOut);
+
+///SESION CURRENT Y GITHUB
+
+router.get('/current', passportCall ('jwt'), (req, res) => {
+    let userData = req.user.user;
+    console.log("Usuario dese current: " + userData);
+    let admin = false;
+    if (userData.role === 'admin') {
+        admin = true;
+    }
+    res
+        .status(200)
+        // // .send(req.user)
+        .render('current', {
+            user: userData,
+            admin: admin,
+            title: "Current",
+        })
+});
+
+///CONEXION CON GITHUB:
+
+router.get(
+    "/github",
+    passport.authenticate("github", { scope: ["user: email"] }),
+    async (req, res) => { }
+);
 
 
-export { registerUser, loginUser };
+router.get(
+    "/githubcallback",
+    passport.authenticate("github", { failureRedirect: "/" }),
+    async (req, res) => {
+        let user = req.user;
+        console.log("Usuario desde Session: ", user);
+        req.session.name = user.first_name;
+        req.session.email = user.email;
+        req.session.role = user.role;
+        console.log("Usuario autenticado:", req.session);
+        res.redirect("/products");
+    }
+);
+
+
+export default router;

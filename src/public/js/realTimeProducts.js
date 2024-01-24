@@ -1,11 +1,9 @@
 let socket = io.connect("http://localhost:8080", { forceNew: true });
 
 
-// socket.on ("productoActualizado", () => {
-//     window.location.href = "/realTimeProducts";
-// })
 
 socket.on("productoActualizado", (products) => {
+    console.log(products);
     render(products);
 })
 
@@ -21,7 +19,7 @@ function render(products) {
         const properties = Object.keys(product);
 
         properties.forEach(prop => {
-            if(prop === '_id' || prop === '__v'){
+            if (prop === '_id' || prop === '__v') {
 
             } else {
                 const listItem = document.createElement('li');
@@ -32,6 +30,8 @@ function render(products) {
         productList.appendChild(productUL);
     });
 }
+
+
 
 function addProduct(e) {
     console.log("Estoy en la funcion addProduct");

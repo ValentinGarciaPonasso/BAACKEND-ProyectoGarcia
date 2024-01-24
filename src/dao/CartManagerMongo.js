@@ -42,14 +42,6 @@ export default class CartManagerMongo {
                 console.log(`Carrito con id ${id} no encontrado`);
                 return null;
             }
-            // const cartId = carts.find(cart => cart.id === id);
-            // if (cartId) {
-            //     console.log(`Carrito con id = ${id}:`, cartId);
-            //     return cartId;
-            // } else {
-            //     console.log(`Carrito con id ${id} no encontrado`);
-            //     return null;
-            // }
         } catch (error) {
             console.error('Error al consultar carrito por ID', error);
             throw error;

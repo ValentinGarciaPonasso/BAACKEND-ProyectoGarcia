@@ -1,4 +1,4 @@
-import userModel from "../persistence/models/user.model.js";
+import userModel from "../dao/models/user.model.js";
 import { createHash, isValidPassword } from "../utilitis.js";
 
 
@@ -38,17 +38,6 @@ export const loginUser = async (req, res) => {
             console.log("Usuario y/o contraseña incorrecta");
             res.redirect("/");
         }
-        // if (user) {
-        //     req.session.name = user.first_name;
-        //     req.session.email = user.email;
-        //     req.session.admin = user.admin;
-        //     // res.redirect("/products");
-        //     console.log("Usuario autenticado:", req.session);
-        //     res.redirect("/products");
-        // } else {
-        //     console.log("Usuario y/o contraseña incorrecta");
-        //     res.redirect("/");
-        // }
     } catch (err) {
         console.log("Error al loggearse: ", err);
         res.redirect("/");

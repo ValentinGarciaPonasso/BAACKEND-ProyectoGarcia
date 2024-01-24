@@ -6,11 +6,18 @@ const cartsCollection = "Carts";
 
 const cartSchema = new Schema({
     id: { type: Number, required: true },
+    username: {
+        _id: {type: mongoose.Schema.Types.ObjectId,
+            ref: "user"
+        },
+        email: String
+    },
     products: [{
         quantity: { type: Number, required: true },
         id: { type: Number, required: true }, // Propiedad "id" del producto
         _id: { type: mongoose.Schema.Types.ObjectId, ref: 'Products', required: true },
-    }]
+    }],
+    total: {type:Number, default: 0}
 });
 
 cartSchema.plugin(mongoosePaginate);

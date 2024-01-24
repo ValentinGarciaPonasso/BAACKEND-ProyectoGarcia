@@ -18,7 +18,7 @@ export default class ProductManagerMongo {
             };
 
             const id = this.products.length + 1;
-            const product =  new Products({
+            const product = new Products({
                 id,
                 title,
                 description,
@@ -28,7 +28,7 @@ export default class ProductManagerMongo {
                 stock,
                 category,
                 thumbnail
-            }); 
+            });
             console.log("Producto en el manager", product);
 
             /// busca si existe en el array un producto con el mismo código
@@ -51,7 +51,7 @@ export default class ProductManagerMongo {
     ///Metodo que devuelve todos los productos del array
     async getProduct() {
         try {
-            const products = await Products.find ();
+            const products = await Products.find();
             return products;
         } catch (e) {
             console.error("Error al consultar productos", e)
@@ -61,7 +61,7 @@ export default class ProductManagerMongo {
 
     //Metodo que trae todos los productos con paginate
 
-    async getProductPaginate (pageNumber, pageSize, sortOrder, category, available) {
+    async getProductPaginate(pageNumber, pageSize, sortOrder, category, available) {
         try {
             let options = {
                 page: parseInt(pageNumber),
@@ -72,8 +72,8 @@ export default class ProductManagerMongo {
             } else if (sortOrder === 'desc') {
                 options.sort = { price: -1 };
             }
-            let query ={}
-            if(category){
+            let query = {}
+            if (category) {
                 query.category = category
                 if (available) {
                     query.available = available
@@ -94,7 +94,7 @@ export default class ProductManagerMongo {
     ///Metodo que devuelve todos los productos con cierto ID
     async getProductById(idFind) {
         try {
-            const products = await Products.find ({id: idFind});
+            const products = await Products.find({ id: idFind });
             return products;
         } catch (e) {
             console.error("Error al consultar productos", e)
@@ -105,9 +105,9 @@ export default class ProductManagerMongo {
     //Metodo para actualizar un producto
     async updateProduct(idFind, productUpdate) {
         try {
-            const productFind = await Products.findOne ({id: idFind})
-            const idUpdate =  productFind._id.toString()
-            const products = await Products.findByIdAndUpdate (idUpdate,productUpdate, {new:true}  );
+            const productFind = await Products.findOne({ id: idFind })
+            const idUpdate = productFind._id.toString()
+            const products = await Products.findByIdAndUpdate(idUpdate, productUpdate, { new: true });
             console.log(`Producto con id ${idFind} actualizado`);
             return products;
         } catch (error) {
@@ -118,9 +118,9 @@ export default class ProductManagerMongo {
     //Metodo para eliminar un producto
     async deleteProduct(idFind) {
         try {
-            const productFind = await Products.findOne ({id: idFind})
-            const idDelete =  productFind._id.toString()
-            const products = await Products.findByIdAndDelete (idDelete);
+            const productFind = await Products.findOne({ id: idFind })
+            const idDelete = productFind._id.toString()
+            const products = await Products.findByIdAndDelete(idDelete);
             console.log(`Producto con id ${idFind} eliminado`);
         } catch (error) {
             console.error('Error al eliminar el producto:', error);

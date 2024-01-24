@@ -1,12 +1,17 @@
-import * as usersDao from "../persistence/users.dao.js"
+import UserDAO from "../dao/users.dao.js";
 
-const getUser = (username) => {
-    return usersDao.getUser(username);
-}
+const Users = new UserDAO();
 
+const getAll = (username) => {
+    return Users.getAll(username);
+};
 
-const addUser = (newUser) => {
-    return usersDao.addUser(newUser);
-}
+const getOne = (username) => {
+    return Users.getOne(username);
+};
 
-export { getUser, addUser }
+const create = (newUser) => {
+    return Users.create(newUser);
+};
+
+export { getAll, getOne, create }

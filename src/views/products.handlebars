@@ -1,23 +1,59 @@
 <div>
     <h1>Productos</h1>
-    <div>
-        <h2>User Profile</h2>
-        {{#if user}}
-        <p>Bienvenido, {{user.first_name}}!</p>
-        <p>Email: {{user.email}}</p>
-        {{!-- <a href="/api/sessions/logout/" title="logout">Logout</a> --}}
-        <form action="/api/sessions/logout/" method="post" id="logoutForm">
-            <button type="submit" title="logout">Logout</button>
-        </form>
-        {{#if admin}}
-        <a href="/realTimeProducts" title="admin">Administracion de productos</a>
-        {{/if}}
-        {{else}}
-        <p>El usuario no se encuentra logeado</p>
-        {{/if}}
+</div>
+{{#if admin}}
+<div>
+    <h2>Admin Profile</h2>
+    {{#if user}}
+    <p>Bienvenido, {{user.first_name}}!</p>
+    <p>Email: {{user.email}}</p>
+    <form action="/api/sessions/logout/" method="post" id="logoutForm">
+        <button type="submit" title="logout">Logout</button>
+    </form>
+    <a href="/api/productos/realTimeProducts" title="admin">Administracion de productos </a>
+    {{else}}
+    <p>El usuario no se encuentra logeado</p>
+    {{/if}}
+</div>
+<div>
+    <h2>Listado de Productos admin:</h2>
+    <div class="bloque">
+        {{#each product.docs}}
+        <div class="tarjeta">
+            <p>Titulo: {{this.title}}</p>
+            <p>Precio: {{lookup this 'price'}}</p>
+            <p>Stock: {{lookup this 'stock'}}</p>
+            <p>Categoría: {{lookup this 'category'}}</p>
+            <a href="/api/products/{{lookup this 'id'}}">Ver Producto</a>
+        </div>
+        {{/each}}
     </div>
     <div>
-        <h2>Listado de Productos:</h2>
+        {{#if product.prevPage}}
+        <a href={{product.prevLink}}>Página Anterior</a>
+        {{/if}}
+        {{#if product.nextPage}}
+        <a href={{product.nextLink}}>Página Siguiente</a>
+        {{/if}}
+    </div>
+</div>
+{{else}}
+<div>
+    <h2>User Profile</h2>
+    {{#if user}}
+    <p>Bienvenido, {{user.first_name}}!</p>
+    <p>Email: {{user.email}}</p>
+    <form action="/api/sessions/logout/" method="post" id="logoutForm">
+        <button type="submit" title="logout">Logout</button>
+    </form>
+    {{#each cart}}
+        <a href="/api/cart/{{this.id}}" title="admin">Ver Carrito ID:{{this.id}} </a>
+    {{/each}}
+    {{else}}
+    <p>El usuario no se encuentra logeado</p>
+    {{/if}}
+    <div>
+        <h2>Listado de Productos</h2>
         <div class="bloque">
             {{#each product.docs}}
             <div class="tarjeta">
@@ -25,7 +61,7 @@
                 <p>Precio: {{lookup this 'price'}}</p>
                 <p>Stock: {{lookup this 'stock'}}</p>
                 <p>Categoría: {{lookup this 'category'}}</p>
-                <a href="/products/{{lookup this 'id'}}">Ver Producto</a>
+                <a href="/api/products/{{lookup this 'id'}}">Ver Producto</a>
                 <button type="submit" id="addToCart" class="addToCart" value={{lookup this 'id' }}>Agregar al
                     carrito</button>
             </div>
@@ -40,5 +76,6 @@
             {{/if}}
         </div>
     </div>
+    {{/if}}
 </div>
 <script type="text/javascript" src="/js/product.js"></script>
