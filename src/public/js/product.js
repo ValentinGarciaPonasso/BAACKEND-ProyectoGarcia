@@ -1,6 +1,9 @@
 let socket = io.connect("http://localhost:8080", { forceNew: true });
 
 console.log("Me encuentro en product.js")
+const cartIdElement = document.getElementById('cartId');
+const cartId = cartIdElement.dataset.cartId;
+console.log("CartId: " + cartId)
 
 
 document.querySelectorAll('.addToCart').forEach(button => {
@@ -9,10 +12,25 @@ document.querySelectorAll('.addToCart').forEach(button => {
     });
 });
 
+document.querySelectorAll('.deleteFromCart').forEach(button => {
+    button.addEventListener('click', function(event) {
+        deleteFromCart(event);
+    });
+});
+
 function addToCart(event) {
+    console.log(cartId);
     const productAddedId = event.target.value;
     console.log("ID del producto: ", productAddedId);
-    socket.emit('cartUpdated', productAddedId);
+    socket.emit('cartUpdated', { variable1: productAddedId, variable2: cartId });
+    return false;
+}
+
+function deleteFromCart(event) {
+    console.log(cartId);
+    const productAddedId = event.target.value;
+    console.log("ID del producto: ", productAddedId);
+    socket.emit('deleteFromCart', { variable1: productAddedId, variable2: cartId });
     return false;
 }
 

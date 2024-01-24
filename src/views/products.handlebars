@@ -47,7 +47,7 @@
         <button type="submit" title="logout">Logout</button>
     </form>
     {{#each cart}}
-        <a href="/api/cart/{{this.id}}" title="admin">Ver Carrito ID:{{this.id}} </a>
+        <a href="/api/cart/{{this.id}}" title="admin" data-cart-id={{this.id}} id="cartId">Ver Carrito ID:{{this.id}} </a>
     {{/each}}
     {{else}}
     <p>El usuario no se encuentra logeado</p>

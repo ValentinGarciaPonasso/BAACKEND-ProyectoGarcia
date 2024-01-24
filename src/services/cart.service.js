@@ -36,7 +36,6 @@ const getCartById = async (id) => {
     try {
         console.log('id en service', id)
         const carts = await Cart.getById(id);
-        console.log("Carrito con el populate: ",carts)
         if(carts) {
             console.log(`Carrito con id = ${id}:`, carts);
             return carts;
@@ -70,28 +69,37 @@ const getCartByUser = async (userId) => {
 const addProductToCart = async (cartId, product) => {
     try {
         const cart = await Cart.getById(cartId);
-        console.log("Cart desde service" + cart);
-        // const idUpdate = cart._id.toString()
+        let cartProducts = cart [0].products;
         if (cart) {
             const idProducto = product[0].id;
-            console.log("id producto a actualizar " + idProducto);
-            console.log("productos dentro del cart " + cart[0].products);
-            console.log("largo del carrito" + cart[0].products.length)
-            const isProduct = cart.products.find(isProduct => isProduct.id === idProducto); 
-            if (isProduct) {
-                isProduct.quantity = isProduct.quantity + 1;
-                const carts = await Cart.updateCart(cartId, cart);
-                return carts;
+            if (cartProducts.length > 0) {
+                const isProduct = cartProducts.find(isProduct => isProduct.id === idProducto); 
+                if (isProduct) {
+                    isProduct.quantity = isProduct.quantity + 1;
+                    const carts = await Cart.updateCart(cartId, cartProducts);
+                    return carts;
+                } else {
+                    //hacer un update
+                    const newproduct = {
+                        id: idProducto,
+                        quantity: 1,
+                        _id: product[0]._id.toString()
+                    }
+                    cartProducts.push(newproduct);
+                    // await fs.promises.writeFile(this.path, JSON.stringify(carts), "utf-8");
+                    const carts = await Cart.updateCart(cartId, cartProducts);
+                    return carts;
+                }
             } else {
                 //hacer un update
                 const newproduct = {
                     id: idProducto,
                     quantity: 1,
-                    _id: product._id.toString(),
+                    _id: product[0]._id.toString(),
                 }
-                cart[0].products.push(newproduct);
+                cartProducts.push(newproduct);
                 // await fs.promises.writeFile(this.path, JSON.stringify(carts), "utf-8");
-                const carts = await Cart.updateCart(cartId, cart);
+                const carts = await Cart.updateCart(cartId, cartProducts);
                 return carts;
             }
         } else {
@@ -106,11 +114,10 @@ const addProductToCart = async (cartId, product) => {
 const deleteProduct = async (cartId, productId) => { 
     try {
         const cartFind = await Cart.getById(cartId)
-        const idUpdate = cartFind._id.toString()
-        const indiceProduct = cartFind.products.findIndex(product => product.id === productId);
+        const indiceProduct = cartFind[0].products.findIndex(product => product.id === productId);
         if (indiceProduct !== -1) {
-            cartFind.products.splice(indiceProduct, 1);
-            const carts = await Cart.updateCart(idUpdate, cartFind);
+            cartFind[0].products.splice(indiceProduct, 1);
+            const carts = await Cart.updateCart(cartId, cartFind[0].products);
             return carts;
         } else {
             console.log('Producto no encontrado');
@@ -124,15 +131,17 @@ const deleteProduct = async (cartId, productId) => {
 const vaciarCarrito = async (cartId) => {
     try {
         const cartFind = await Cart.getById(cartId)
-        const idUpdate = cartFind._id.toString()
-        cartFind.products =[];
-        const carts = await Cart.updateCart(idUpdate, cartFind);
+        cartFind[0].products =[];
+        const carts = await Cart.updateCart(cartId, cartFind[0].products);
         return carts
     } catch (error) {
         console.error('Error al eliminar los producto:', error);
         throw error;
     }
 }
+
+
+////////FALTAN PROBAR ESTOS 2
 
 const updateProducts = async (cartId, productUpdate) => {
     try {

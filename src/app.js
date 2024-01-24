@@ -23,6 +23,7 @@ import passport from "passport";
 import initializePassport from "./config/passport.config.js";
 import router from './routes/router.js';
 import * as productService from "./services/product.service.js";
+import * as cartService from "./services/cart.service.js";
 
 const port = 8080;
 const app = express();
@@ -105,22 +106,35 @@ io.on('connection', async (socket) => {
             console.error("Error al eliminar producto:", e);
         };
     });
-    socket.on("cartUpdated", async (productAddedId) => {
+    socket.on("cartUpdated", async (data) => {
         try {
+            const productAddedId = data.variable1;
+            const cartId = data.variable2;
             const product = await productService.getByID(productAddedId);
             console.log(`Buscamos producto con id ${productAddedId}: `, product);
             if (product) {
-                //de momento hardcodeo el cartId
-                let cartId = 1;
-                await cartManagerMongo.addProductToCart(cartId, product);
-                console.log("producto agregado")
+                const newCarrito = await cartService.addProductToCart(cartId, product);
+                console.log(`Nuevo carrito: ` ,newCarrito);
             } else {
                 console.log("No se encontró producto")
             }
         } catch (e) {
             console.error("Error al agregar producto:", e);
         };
-    })
+    });
+    socket.on("deleteFromCart", async (data) => {
+        try {
+            const productAddedId = data.variable1;
+            const cartId = data.variable2;
+            console.log(`Id producto a eliminar:  ${productAddedId}: `);
+            console.log(`Id carrito a modificar:  ${cartId}: `);
+            const newCarrito = await cartService.deleteProduct(cartId, productAddedId);
+            console.log(`Nuevo carrito: ` ,newCarrito);
+
+        } catch (e) {
+            console.error("Error al agregar producto:", e);
+        };
+    });
 });
 
 

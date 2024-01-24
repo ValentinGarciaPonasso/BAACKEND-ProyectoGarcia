@@ -1,5 +1,7 @@
 <div>
-    <h1>Carrito ID: {{id}}</h1>
+    {{#each cart}}
+    <h1 data-cart-id={{this.id}} id="cartId">Carrito ID: {{this.id}}</h1>
+    {{/each}}
     <div class="bloque">
         {{#each products}}
         <div class="tarjeta">
@@ -11,12 +13,12 @@
             {{/with}}
             <p>Id: {{this.id}}</p>
             <p>Cantidad: {{this.quantity}}</p>
-            <a href="/products/{{this.id}}">Ver Producto</a>
-            <button type="submit" class="addToCart" value="{{this.id}}">Quitar del carrito</button>
+            <a href="/api/products/{{this.id}}">Ver Producto</a>
+            <button type="submit" class="deleteFromCart" value="{{this.id}}">Quitar del carrito</button>
         </div>
         {{/each}}
     </div>
     <a href="/products/">Volver</a>
 </div>
 
-{{!-- <script type="text/javascript" src="/js/product.js"></script> --}}
+<script type="text/javascript" src="/js/product.js"></script>

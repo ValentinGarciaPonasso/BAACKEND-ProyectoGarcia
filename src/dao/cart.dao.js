@@ -32,9 +32,9 @@ class CartsDAO {
         }
     }
 
-    async updateCart(idUpdate, newCart) {
+    async updateCart(idUpdate, newProduct) {
         try {
-            return await Cart.updateOne({id:idUpdate},{$set: newCart})
+            return await Cart.updateOne({id:idUpdate},{$set: {products: newProduct}})
         } catch (error) {
             throw error;
         }

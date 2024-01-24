@@ -22,6 +22,7 @@ router.get('/all', async (req, res) => {
 router.get('/:id',passportCall ('jwt'), async (req, res) => {
     try {
         let userData = req.user.user;
+        const cart = await cartService.getCartByUser(userData._id);
         const product = await productService.getByID (req.params.id);
         let admin = false;
         if (userData.role === 'admin') {
@@ -33,7 +34,8 @@ router.get('/:id',passportCall ('jwt'), async (req, res) => {
             user: userData,
             admin: admin,
             titulo: product[0].title,
-            product
+            product,
+            cart: cart
         })
     } catch (error) {
         res.status(500).json({ message: error.message });

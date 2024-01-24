@@ -1,46 +1,50 @@
 <div>
     <h1>{{titulo}}</h1>
     {{#if admin}}
-        <h2>Admin</h2>
-        <div class="bloque">
-            {{#each product}}
-            <div class="tarjeta">
-                <p>ID: {{lookup this 'id'}}</p>
-                <p>Descripción: {{lookup this 'description'}}</p>
-                <p>Código: {{lookup this 'code'}}</p>
-                <p>Precio: {{lookup this 'price'}}</p>
-                <p>Stock: {{lookup this 'stock'}}</p>
-                <p>Categoría: {{lookup this 'category'}}</p>
-                {{#if available}}
-                    <p>Disponible: SI</p>
-                {{else}}
-                    <p>Disponible: NO</p>
-                {{/if}}
-            </div>
-            {{/each}}
+    <h2>Admin</h2>
+    <div class="bloque">
+        {{#each product}}
+        <div class="tarjeta">
+            <p>ID: {{lookup this 'id'}}</p>
+            <p>Descripción: {{lookup this 'description'}}</p>
+            <p>Código: {{lookup this 'code'}}</p>
+            <p>Precio: {{lookup this 'price'}}</p>
+            <p>Stock: {{lookup this 'stock'}}</p>
+            <p>Categoría: {{lookup this 'category'}}</p>
+            {{#if available}}
+            <p>Disponible: SI</p>
+            {{else}}
+            <p>Disponible: NO</p>
+            {{/if}}
         </div>
-        <a href="/api/products">Volver</a>
+        {{/each}}
+    </div>
+    <a href="/api/products">Volver</a>
     {{else}}
-        <h2>User</h2>
-        <div class="bloque">
-            {{#each product}}
-            <div class="tarjeta">
-                <p>ID: {{lookup this 'id'}}</p>
-                <p>Descripción: {{lookup this 'description'}}</p>
-                <p>Código: {{lookup this 'code'}}</p>
-                <p>Precio: {{lookup this 'price'}}</p>
-                <p>Stock: {{lookup this 'stock'}}</p>
-                <p>Categoría: {{lookup this 'category'}}</p>
-                {{#if available}}
-                    <p>Disponible: SI</p>
-                {{else}}
-                    <p>Disponible: NO</p>
-                {{/if}}
-                <button type="submit" id="addToCart" class="addToCart" value={{lookup this 'id'}}>Agregar al carrito</button>
-            </div>
-            {{/each}}
+    <h2>User</h2>
+    {{#each cart}}
+        <a href="/api/cart/{{this.id}}" title="admin" data-cart-id={{this.id}} id="cartId">Ver Carrito ID:{{this.id}} </a>
+    {{/each}}
+    <div class="bloque">
+        {{#each product}}
+        <div class="tarjeta">
+            <p>ID: {{lookup this 'id'}}</p>
+            <p>Descripción: {{lookup this 'description'}}</p>
+            <p>Código: {{lookup this 'code'}}</p>
+            <p>Precio: {{lookup this 'price'}}</p>
+            <p>Stock: {{lookup this 'stock'}}</p>
+            <p>Categoría: {{lookup this 'category'}}</p>
+            {{#if available}}
+            <p>Disponible: SI</p>
+            {{else}}
+            <p>Disponible: NO</p>
+            {{/if}}
+            <button type="submit" id="addToCart" class="addToCart" value={{lookup this 'id' }}>Agregar al
+                carrito</button>
         </div>
-        <a href="/api/products">Volver</a>
+        {{/each}}
+    </div>
+    <a href="/api/products">Volver</a>
     {{/if}}
 </div>
 

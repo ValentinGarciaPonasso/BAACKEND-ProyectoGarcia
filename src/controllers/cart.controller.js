@@ -21,12 +21,18 @@ router.get('/createCart', passportCall ('jwt'), async(req, res) => {
     }
 });
 
-router.get('/:cid', async (req, res) => {
+router.get('/:cid',passportCall ('jwt'), async (req, res) => {
     const id = parseInt(req.params.cid, 10);
     try {
+        let userData = req.user.user;
         const cart = await cartService.getCartById(id);
+        let products = cart[0].products;
         if (cart) {
-            res.status(200).json(cart);
+            res.status(200).render('cartDetail', {
+                user: userData,
+                products,
+                cart: cart
+            });
         } else {
             res.status(404).send('Carrito no encontrado');
         }
