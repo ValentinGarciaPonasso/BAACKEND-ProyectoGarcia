@@ -10,8 +10,9 @@ const ticketSchema =new Schema({
     purchaser: {type:String,required:true},
     products: [{
         title: {type:String},
+        quantity: {type:Number},
         price: {type:Number},
-        inStok: {type:String}
+        inStok: {type:Boolean}
     },]
 });
 

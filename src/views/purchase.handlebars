@@ -1,0 +1,24 @@
+<div>
+    <h1>Ticket</h1>
+    <h2>Compra Finalizada</h2>
+    <p>Orden: {{ticket.code}}</p>
+    <p>Comprador: {{ticket.purchaser}}</p>
+    <p>Hora de compra: {{ticket.purchase_datetime}}</p>
+    <div class="bloque">
+    {{#each products}}
+        {{#if this.inStok}}
+            <div class="tarjeta">
+                <p>Producto: {{this.title}}</p>
+                <p>Precio: {{this.price}}</p>
+                <p>Cantidad: {{this.quantity}}</p>
+            </div>
+        {{else}}
+        <div class="tarjeta">
+            <p>Producto: {{this.title}}</p>
+            <p>Producto sin stock, no se agregó a su compra</p>
+        </div>
+        {{/if}}
+    {{/each}}
+    <h2>Total de la compra: {{ticket.amount}}</h2>
+    </div>
+</div>

@@ -108,25 +108,6 @@ router.put("/:cid/productos/:pid", async (req, res) => {
     }
 });
 
-//MOSTRAMOS PRODUCTOS EN PANTALLA
-// router.get('/carts/:cid', async (req, res) => {
-//     const id = parseInt(req.params.cid, 10);
-//     try {
-//         const cart = await cartService.getCartById(id);
-//         if (cart) {
-//             let products = cart.products;
-//             res.render('cartDetail', {
-//                 id: cart.id,
-//                 products: products
-//             })
-//         } else {
-//             res.status(404).send('Carrito no encontrado');
-//         }
-//     } catch (e) {
-//         res.status(500).send('Error al buscar carrito');
-//     }
-// });
-
 
 ///PURCHASER
 
@@ -162,7 +143,8 @@ router.get('/:cid/purchase', passportCall('jwt'), async (req, res) => {
                 let productInTicket = {
                     title: product._id.title,
                     price: product._id.price,
-                    inStock: "Si"
+                    quantity:product.quantity,
+                    inStok: true
                 }
                 productsInTicket.push(productInTicket);
                 console.log("Productc in stock: " + productsInTicket);
@@ -175,7 +157,7 @@ router.get('/:cid/purchase', passportCall('jwt'), async (req, res) => {
                 let productInTicket = {
                     title: product._id.title,
                     price: product._id.price,
-                    inStock: "No"
+                    inStok: false
                 };
                 productsInTicket.push(productInTicket);
                 console.log("Productc in stock: " + JSON.stringify(productsInTicket));
@@ -183,9 +165,13 @@ router.get('/:cid/purchase', passportCall('jwt'), async (req, res) => {
         }
         //);
         console.log("Total de la compra: " + amount)
-        const ticket = await ticketService.createTicket(amount, userData.email,productsInTicket)
-        res.status(200).json(ticket);
-
+        const ticket = await ticketService.createTicket(amount, userData.email,productsInTicket)         
+        console.log("ticket: " + ticket.products);
+        res.status(200).render('purchase', {
+            user: userData,
+            ticket: ticket,
+            products: ticket.products,
+        });
     } catch (e) {
         res.status(500).send('Error al procesar la compra');
     }
