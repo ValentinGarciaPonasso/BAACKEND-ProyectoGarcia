@@ -1,4 +1,4 @@
-<div>
+<div id="carrito">
     {{#each cart}}
     <h1 data-cart-id={{this.id}} id="cartId">Carrito ID: {{this.id}}</h1>
     {{/each}}
@@ -18,7 +18,12 @@
         </div>
         {{/each}}
     </div>
-    <a href="/products/">Volver</a>
+    <div>
+        {{#each cart}}
+            <a href="/api/cart/{{this.id}}/purchase">Comprar</a>
+            <a href="/api/products/">Volver</a>
+        {{/each}}
+    </div>
 </div>
 
 <script type="text/javascript" src="/js/product.js"></script>

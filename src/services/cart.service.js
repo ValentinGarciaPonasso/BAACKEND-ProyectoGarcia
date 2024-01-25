@@ -68,6 +68,8 @@ const getCartByUser = async (userId) => {
 
 const addProductToCart = async (cartId, product) => {
     try {
+        console.log("cartId: " + cartId)
+        console.log("productid " + product[0]);
         const cart = await Cart.getById(cartId);
         let cartProducts = cart [0].products;
         if (cart) {

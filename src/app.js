@@ -78,7 +78,6 @@ io.on('connection', async (socket) => {
     console.log("Un cliente se ha conectado");
     try {
         const productos = await productService.getAll();
-        console.log("Produutos desde app" + productos)
         await io.emit("productoActualizado", productos);
     } catch (error) {
         console.error("Error al obtener producto:", error);
@@ -125,11 +124,13 @@ io.on('connection', async (socket) => {
     socket.on("deleteFromCart", async (data) => {
         try {
             const productAddedId = data.variable1;
+            const productId = parseInt(productAddedId, 10);
             const cartId = data.variable2;
-            console.log(`Id producto a eliminar:  ${productAddedId}: `);
-            console.log(`Id carrito a modificar:  ${cartId}: `);
-            const newCarrito = await cartService.deleteProduct(cartId, productAddedId);
+            console.log(`Id producto a eliminar:  ${productId} `);
+            console.log(`Id carrito a modificar:  ${cartId} `);
+            const newCarrito = await cartService.deleteProduct(cartId, productId);
             console.log(`Nuevo carrito: ` ,newCarrito);
+            io.emit("carritoActualizado", newCarrito);
 
         } catch (e) {
             console.error("Error al agregar producto:", e);

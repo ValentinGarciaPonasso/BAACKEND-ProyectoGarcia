@@ -1,5 +1,10 @@
 let socket = io.connect("http://localhost:8080", { forceNew: true });
 
+socket.on("carritoActualizado", (newCarrito) => {
+    console.log(newCarrito);
+    location.reload();
+    })
+
 console.log("Me encuentro en product.js")
 const cartIdElement = document.getElementById('cartId');
 const cartId = cartIdElement.dataset.cartId;
@@ -7,13 +12,13 @@ console.log("CartId: " + cartId)
 
 
 document.querySelectorAll('.addToCart').forEach(button => {
-    button.addEventListener('click', function(event) {
+    button.addEventListener('click', function (event) {
         addToCart(event);
     });
 });
 
 document.querySelectorAll('.deleteFromCart').forEach(button => {
-    button.addEventListener('click', function(event) {
+    button.addEventListener('click', function (event) {
         deleteFromCart(event);
     });
 });
