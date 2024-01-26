@@ -21,4 +21,8 @@ const createTicket = async (amount, email, products) => {
     }
 }
 
-export {createTicket};
+const getTicket = async (code) => {
+    return Ticket.getTicket (code);
+}
+
+export {createTicket, getTicket};

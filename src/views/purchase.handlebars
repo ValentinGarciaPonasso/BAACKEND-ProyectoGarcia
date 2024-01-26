@@ -19,6 +19,9 @@
         </div>
         {{/if}}
     {{/each}}
-    <h2>Total de la compra: {{ticket.amount}}</h2>
     </div>
+    <h2>Total de la compra: {{ticket.amount}}</h2>
+    <p>Se envíó un correo con los datos de su compra</p>
+    {{!-- <a href="/api/email/{{ticket.code}}">Reenviar correo</a> --}}
+    <a href="/api/products">Volver al listado de productos</a>
 </div>

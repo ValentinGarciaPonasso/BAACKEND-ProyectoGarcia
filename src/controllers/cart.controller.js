@@ -4,6 +4,7 @@ import * as cartService from "../services/cart.service.js";
 import * as productService from "../services/product.service.js";
 import * as ticketService from "../services/ticket.service.js";
 import * as userService from "../services/user.service.js";
+import * as emailService from "../services/email.service.js";
 import { passportCall } from "../utilitis.js";
 import "dotenv/config.js";
 
@@ -165,7 +166,9 @@ router.get('/:cid/purchase', passportCall('jwt'), async (req, res) => {
         }
         //);
         console.log("Total de la compra: " + amount)
-        const ticket = await ticketService.createTicket(amount, userData.email,productsInTicket)         
+        const ticket = await ticketService.createTicket(amount, userData.email,productsInTicket);
+        console.log("Enviando mail");
+        const result = await emailService.sendEmail(ticket);
         console.log("ticket: " + ticket.products);
         res.status(200).render('purchase', {
             user: userData,
