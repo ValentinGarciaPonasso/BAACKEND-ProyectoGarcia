@@ -54,6 +54,7 @@ router.post('/', async (req, res) => {
             category: req.body.category,
             thumbnail: req.body.thumbnail
         }
+
         const newProducts = await productService.addProduct(newProduct.title, newProduct.description, newProduct.code, newProduct.price, newProduct.available, newProduct.stock, newProduct.category, newProduct.thumbnail);
         res.status(200).json({
             massage: "Producto agregado",

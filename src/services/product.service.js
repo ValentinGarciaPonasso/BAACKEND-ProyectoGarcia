@@ -1,4 +1,8 @@
 import ProductDao from "../dao/product.dao.js";
+import CustomError from "../errors/custom.error.js";
+import EnumError from "../errors/enum.error.js";
+import { generateProductErrorInfo } from "../errors/info.error.js";
+
 
 const Product = new ProductDao();
 
@@ -21,8 +25,12 @@ const addProduct = async (title, description, code, price, available, stock, cat
 
         let products = await Product.getAll();
         if (!title || !description || !code || !price || !available || !stock || !category || !thumbnail) {
-            console.log('Favor completar todos los campos')
-            throw new Error('Favor completar todos los campos');
+            CustomError.createError({
+                name: "Product creation error",
+                cause: generateProductErrorInfo({title, description ,code ,price ,available ,stock ,category ,thumbnail}),
+                message: "Error trying to create a new product",
+                code: EnumError.INVALID_TYPES_ERROR
+            })
         };
 
         const id = products.length + 1;
