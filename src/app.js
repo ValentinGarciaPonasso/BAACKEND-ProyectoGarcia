@@ -1,6 +1,4 @@
 import express from 'express';
-// import { productRouter, productRouterById, productRouterDb } from './routes/product.router.js';
-//import { cartRouter, cartRouterById, cartRouterDb} from './routes/cart.router.js';
 import loginRouter from './routes/login.js';
 import registerRouter from './routes/register.js';
 import profileRouter from  './routes/profile.js';
@@ -36,8 +34,8 @@ const cartManagerMongo = new CartManagerMongo();
 
 //Estructura Handlebars
 const hbs = handlebars.create({
-    defaultLayout: 'main', // Reemplaza 'main' con tu diseño predeterminado
-    extname: '.handlebars', // Reemplaza '.handlebars' con tu extensión de archivo
+    defaultLayout: 'main', 
+    extname: '.handlebars', 
     runtimeOptions: {
         allowProtoPropertiesByDefault: true,
         allowProtoMethodsByDefault: true,
@@ -46,6 +44,7 @@ const hbs = handlebars.create({
 app.engine('handlebars', hbs.engine);
 app.set('views', `${_dirname}/views`);
 app.set('view engine', 'handlebars');
+
 //Archivos Estaticos
 app.use(express.static('src/public'));
 
@@ -82,7 +81,7 @@ io.on('connection', async (socket) => {
     } catch (error) {
         console.error("Error al obtener producto:", error);
     }
-    socket.on("nuevoProducto", async (newProduct) => {                                                      ///recibimos desde el servidor el mensaje y lo pusheamos a nuestro array
+    socket.on("nuevoProducto", async (newProduct) => {               ///recibimos desde el servidor el mensaje y lo pusheamos a nuestro array
         console.log("Nuevo producto recibido:");
         console.log(newProduct);
         try {
@@ -138,32 +137,13 @@ io.on('connection', async (socket) => {
     });
 });
 
-
 ///Passport
 initializePassport();
 app.use(passport.initialize());
 app.use(passport.session());
 
-
-//Productos
-
-// app.get('/realTimeProducts', productRouter);
-// app.get('/products', productRouter);
-// app.get('/products/:id', productRouter);
-// app.get('/carts/:cid', cartRouterDb);
-
-
 //ROUTER
 router(app);
-
-
-////MONGO
-// app.use("/api/productos", productRouterDb);
-// app.use("/api/carrito", cartRouterDb);
-
-///USUARIOS
-// app.use('/', loginRouter);
-// app.use('/api/sessions', sessionRouter);
 
 app.use((err, req, res, next) => {
     console.error(err.stack);
