@@ -5,6 +5,8 @@ export const generateUserErrorInfo = (user) => {
         first_name: needs to be String, received: ${user.first_name}
         last_name: needs to be String, received: ${user.last_name}
         email: needs to be String, received: ${user.email}
+        age: needs to be Number, received: ${user.age}
+        password: needs to be String
     `;
 };
 

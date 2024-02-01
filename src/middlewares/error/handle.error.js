@@ -1,4 +1,4 @@
-import EnumError from "../../utils/enum.error.js";
+import EnumError from "../../errors/enum.error.js";
 
 export default (error, req, res, next) => {
     console.log(error.cause);

@@ -4,6 +4,9 @@ import "dotenv/config.js";
 import { passportCall, createHash, generateToken, isValidPassword } from "../utilitis.js";
 import passport from "passport";
 import { logOut} from '../controllers/auth.controller.js';
+import { generateUserErrorInfo } from "../errors/info.error.js";
+import CustomError from "../errors/custom.error.js";
+import EnumError from "../errors/enum.error.js";
 
 
 const router = new Router();
@@ -22,9 +25,17 @@ router.post("/register", async (req, res) => {
         const { first_name, last_name, email, age, password } = req.body;
 
         if (!first_name || !last_name || !email || !age || !password)
-            return res
-                .status(400)
-                .send({ status: "Error", Error: "Uno o varios datos incompletos" })
+            // return res
+            //     .status(400)
+            //     .send({ status: "Error", Error: "Uno o varios datos incompletos" })
+            {
+                CustomError.createError({
+                    name: "Product creation error",
+                    cause: generateUserErrorInfo({first_name, last_name ,email ,age ,password}),
+                    message: "Error trying to create a new product",
+                    code: EnumError.INVALID_TYPES_ERROR
+                })
+            }
 
         let findUser = await userServices.getOne(email);
         let newUser = null;
