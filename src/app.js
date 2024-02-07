@@ -23,6 +23,7 @@ import router from './routes/router.js';
 import * as productService from "./services/product.service.js";
 import * as cartService from "./services/cart.service.js";
 import errorHandler from "./middlewares/error/handle.error.js";
+import { addLogger } from './middlewares/logger.middleware.js';
 
 const port = 8080;
 const app = express();
@@ -143,11 +144,15 @@ initializePassport();
 app.use(passport.initialize());
 app.use(passport.session());
 
+//MIDLEWARE PARA MANEJO DE LOGGER
+app.use (addLogger);
+
 //ROUTER
 router(app);
 
 //MIDDLEWARE ERROR HANDLER
 app.use(errorHandler);
+
 
 app.use((err, req, res, next) => {
     console.error(err.stack);

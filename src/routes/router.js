@@ -5,6 +5,7 @@ import productRouter from "../routes/product.router.js";
 import cartController from "../controllers/cart.controller.js";
 import emailRouter from "../controllers/email.controller.js";
 import mockingProductsRouter from "../controllers/mockingProducts.controller.js";
+import loggerTestController from "../controllers/loggerTest.controller.js";
 
 
 const router = (app) => {
@@ -16,6 +17,7 @@ const router = (app) => {
     app.use('/api/cart', cartController);
     app.use('/api/email', emailRouter);
     app.use('/', mockingProductsRouter );
+    app.use('/loggerTest', loggerTestController );
 
 };
 
