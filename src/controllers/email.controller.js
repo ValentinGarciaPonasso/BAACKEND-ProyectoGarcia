@@ -7,10 +7,10 @@ const router = Router();
 router.post("/:tid", async (req, res) => {
     try {
         const code = req.params.tid;
-        console.log("hola desde controller " + code);
         const tickets = await ticketService.getTicket(code);
         const ticket = tickets[0];
-        console.log("Ticket desde ameil controller: " + ticket )
+        req.logger.info("Ticket desde email controller: " + ticket );
+        //console.log("Ticket desde ameil controller: " + ticket )
         const email = emailService.sendEmail(ticket);
         const cart = 
         res.status(200).redirect("/api/cart/:cid/purchase");

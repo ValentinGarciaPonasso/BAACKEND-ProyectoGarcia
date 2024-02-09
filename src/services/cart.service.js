@@ -7,8 +7,6 @@ const Cart = new CartDao();
 const createCart = async (user) => {
     try {
         const carts = await Cart.getAll();
-        console.log('carritos: ', carts);
-        console.log(user.email);
         //generamos un id único
         const cartId = carts.length + 1;
         const cartProducts = [];

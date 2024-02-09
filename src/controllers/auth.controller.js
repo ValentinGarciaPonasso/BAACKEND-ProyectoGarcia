@@ -47,13 +47,13 @@ export const loginUser = async (req, res) => {
 export const logOut = async (req, res) => {
     try {
         // Verifica si el usuario está autenticado antes de cerrar la sesión
-        console.log("Voy a cerrar la sesion: " + req.session.email)
+        req.logger.info("Voy a cerrar la sesion: " + req.session.email);
         if (req.session.email) {
             delete req.session.email;
             // Opcionalmente, puedes destruir completamente la sesión
             req.session.destroy((err) => {
                 if (err) {
-                    console.error("Error al cerrar la sesión", err);
+                    req.logger.error("Error al cerrar la sesión", err);
                     res.status(500).send("Error al cerrar la sesión");
                 } else {
                     console.log("Cerre la sesión: ")

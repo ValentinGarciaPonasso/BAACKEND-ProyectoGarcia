@@ -14,7 +14,8 @@ router.get('/all', async (req, res) => {
             title: "Listado de Productos"
         })
     } catch (e) {
-        console.log(e);
+        req.logger.error(e);
+        //console.log(e);
         res.status(500).send('Error al leer archivo');
     }
 });
@@ -28,8 +29,9 @@ router.get('/:id',passportCall ('jwt'), async (req, res) => {
         if (userData.role === 'admin') {
             admin = true;
         }
-        console.log("admin: ", admin);
-        console.log(req.params.id)
+        req.logger.info("admin: " + admin + " id:" + req.params.id);
+        // console.log("admin: ", admin);
+        // console.log(req.params.id)
         res.render('productDetail', {
             user: userData,
             admin: admin,
@@ -68,8 +70,9 @@ router.post('/', async (req, res) => {
 router.put("/:id", async (req, res) => {
     const id = req.params.id;
     const productUpdate = req.body
-    console.log("id es: ", id);
-    console.log("Datos a actualizar: ", productUpdate)
+    req.logger.info("id es: " + id + "Datos a actualizar: " + productUpdate);
+    // console.log("id es: ", id);
+    // console.log("Datos a actualizar: ", productUpdate)
     try {
         const product = await productService.updateProduct(id, productUpdate);
         if (!product) {
@@ -95,15 +98,19 @@ router.delete("/:id", async (req, res) => {
 router.get('/',passportCall ('jwt'), async (req, res) => {
     let userData = req.user.user;
     try {
-        console.log("user desde controller product: " + userData);
+        req.logger.info("user desde controller product: " + userData);
+        //console.log("user desde controller product: " + userData);
         const cart = await cartService.getCartByUser(userData._id);
         const { limit = 10, page = 1, sort, category, available} = req.query;
         const product = await productService.paginate(page, limit, sort,category, available);
         product.prevLink = product.hasPrevPage?`http://localhost:8080/api/products/?page=${product.prevPage}`:'';
         product.nextLink = product.hasNextPage?`http://localhost:8080/api/products/?page=${product.nextPage}`:'';
-        console.log("Producto desde router: ",product);
-        console.log("Usuario autenticado  en products:", userData);
-        console.log("carrito desde product controller: " + cart)
+        req.logger.info("Producto desde router: ",product);
+        req.logger.info("Usuario autenticado  en products:", userData);
+        req.logger.info("carrito desde product controller: " + cart);
+        // console.log("Producto desde router: ",product);
+        // console.log("Usuario autenticado  en products:", userData);
+        // console.log("carrito desde product controller: " + cart)
         let admin = false;
         if (userData.role === 'admin') {
             admin = true;

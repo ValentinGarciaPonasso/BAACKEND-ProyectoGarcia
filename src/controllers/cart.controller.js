@@ -14,8 +14,8 @@ router.get('/createCart', passportCall('jwt'), async (req, res) => {
     let userData = req.user.user;
     // let userData = {first_name:"admin", last_name:"admin", email:"admin", password:"prueba", age: 99, role: "user"}
     try {
-        console.log("user desde controller: " + userData)
         const newCart = await cartService.createCart(userData);
+        req.logger.info("Carrito creado con exito");
         res.status(200).redirect("/api/sessions/current");
     } catch (e) {
         console.log(e);
@@ -48,10 +48,12 @@ router.post('/:cid/productos/:pid', async (req, res) => {
     const productId = parseInt(req.params.pid, 10);
     try {
         const product = await productService.getByID(productId);
-        console.log(`Buscamos producto con id ${productId}: `, product);
+        //console.log(`Buscamos producto con id ${productId}: `, product);
+        req.logger.info(`Buscamos producto con id ${productId}: `, product);
         if (product) {
             const newCarrito = await cartService.addProductToCart(cartId, product);
-            console.log(`Nuevo carrito: `, newCarrito);
+            req.logger.info(`Nuevo carrito: `, newCarrito);
+            //console.log(`Nuevo carrito: `, newCarrito);
             res.status(200).json({
                 massage: "Producto agregado al carrito",
                 data: newCarrito
@@ -100,7 +102,8 @@ router.put("/:cid/productos/:pid", async (req, res) => {
     const cartId = parseInt(req.params.cid, 10);
     const productId = parseInt(req.params.pid, 10);
     const productUpdateQuantity = req.body.quantity
-    console.log(productUpdateQuantity)
+    req.logger.info(productUpdateQuantity);
+    //console.log(productUpdateQuantity)
     try {
         const cart = await cartService.updateProductsQuantity(cartId, productId, productUpdateQuantity)
         res.status(201).json(cart);
@@ -121,12 +124,12 @@ router.get('/:cid/purchase', passportCall('jwt'), async (req, res) => {
         const cartId = parseInt(req.params.cid, 10);
         let cart = await cartService.getCartById(cartId);
         const productsInCart = cart[0].products;
-        console.log("Products in Cart: " + productsInCart)
+        req.logger.info("Products in Cart: " + productsInCart);
+        //console.log("Products in Cart: " + productsInCart)
 
         //Vaciamos el carrito
         await cartService.vaciarCarrito(cartId)
         //Recorremos todos los productos del carrito
-        // productsInCart.forEach(async product => {
             for (const product of productsInCart){
             //Buscamos el producto en la BD
             let productInStock = await productService.getByID(product.id);

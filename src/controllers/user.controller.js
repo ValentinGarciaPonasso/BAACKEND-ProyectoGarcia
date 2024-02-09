@@ -25,9 +25,6 @@ router.post("/register", async (req, res) => {
         const { first_name, last_name, email, age, password } = req.body;
 
         if (!first_name || !last_name || !email || !age || !password)
-            // return res
-            //     .status(400)
-            //     .send({ status: "Error", Error: "Uno o varios datos incompletos" })
             {
                 CustomError.createError({
                     name: "Product creation error",
@@ -55,7 +52,6 @@ router.post("/register", async (req, res) => {
             let result = await userServices.create(newUser)
         }
         let user = await userServices.getOne(email)
-        console.log("prueba de user" + user)
         let token = generateToken(user);
         res
         .cookie("access_token", token, {
@@ -95,7 +91,8 @@ router.post ("/login", async (req, res) => {
                 .redirect("/api/sessions/current");
         }else {
             let user = await userServices.getOne(email)
-            console.log("Usuario desde sesion: " + user);
+            req.logger.info("Usuario desde sesion: " + user);
+            //console.log("Usuario desde sesion: " + user);
             if (!user)
                 return res.status(401).send({
                     status: "error",
@@ -118,7 +115,8 @@ router.post ("/login", async (req, res) => {
                 .redirect("/api/sessions/current");
         };
     } catch (error) {
-        console.log("Error credenciales inválidas", error);
+        req.logger.error("Error credenciales inválidas", error);
+        //console.log("Error credenciales inválidas", error);
         return res.redirect("/");
     }
 });
@@ -131,7 +129,7 @@ router.post("/logout", logOut);
 
 router.get('/current', passportCall ('jwt'), (req, res) => {
     let userData = req.user.user;
-    console.log("Usuario dese current: " + userData);
+    req.logger.info("Acceso correcto a current");
     let admin = false;
     if (userData.role === 'admin') {
         admin = true;
@@ -160,11 +158,13 @@ router.get(
     passport.authenticate("github", { failureRedirect: "/" }),
     async (req, res) => {
         let user = req.user;
-        console.log("Usuario desde Session: ", user);
+        req.logger.info("Usuario desde Session: ", user);
+        //console.log("Usuario desde Session: ", user);
         req.session.name = user.first_name;
         req.session.email = user.email;
         req.session.role = user.role;
-        console.log("Usuario autenticado:", req.session);
+        req.logger.info("Usuario autenticado:", req.session);
+        //console.log("Usuario autenticado:", req.session);
         res.redirect("/products");
     }
 );
