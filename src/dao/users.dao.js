@@ -23,9 +23,9 @@ import userModel from "./models/user.model.js";
 import UserDTO from "../DTOs/user.dto.js";
 
 class UserDao {
-    constructor() {}
+    constructor() { }
 
-    async getAll() { 
+    async getAll() {
         try {
             return await userModel.find();
         } catch (e) {
@@ -33,11 +33,11 @@ class UserDao {
         }
     };
 
-    async getOne (username) {
+    async getOne(username) {
         try {
             return await userModel.findOne(
-                {email: username}, 
-                {email:1, first_name:1,last_name: 1, age:1, password:1, role:1}
+                { email: username },
+                { email: 1, first_name: 1, last_name: 1, age: 1, password: 1, role: 1 }
             );
         } catch (e) {
             throw e;
@@ -52,6 +52,24 @@ class UserDao {
             throw e;
         }
     };
+
+    async update(pass, userEmail) {
+        try {
+            const usuarioActualizado = await userModel.findOneAndUpdate(
+                { email: userEmail }, 
+                { $set: { password: pass } }, 
+                { new: true } 
+            );
+            if (usuarioActualizado) {
+                console.log("Contraseña actualizada con éxito: ", usuarioActualizado);
+            } else {
+                console.log(`No se encontró ningún usuario con el correo electrónico proporcionado (${email}).`);
+            }
+            return usuarioActualizado;
+        } catch (error) {
+            throw error;
+        }
+    }
 }
 
 export default UserDao;

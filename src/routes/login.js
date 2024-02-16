@@ -8,7 +8,7 @@ loginRouter.get('/', (req, res)  => {
         title: "Inicio de sesión",
         title_register: "Registro",
         actionRegister: "/api/sessions/register/",
-        actionLogin: "/api/sessions/login/",
+        actionLogin: "/api/sessions/login/"
     };
     res.render('index', data);
 });

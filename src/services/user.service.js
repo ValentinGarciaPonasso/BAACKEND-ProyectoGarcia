@@ -14,4 +14,8 @@ const create = (newUser) => {
     return Users.create(newUser);
 };
 
-export { getAll, getOne, create }
+const modifyPass = (pass, userEmail) => {
+    return Users.update(pass, userEmail);
+};
+
+export { getAll, getOne, create, modifyPass }

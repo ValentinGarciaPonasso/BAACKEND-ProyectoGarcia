@@ -2,23 +2,29 @@
   <div class="row">
     <div class="col-md-6">
       <h2>{{title}}</h2>
-      <form action="{{actionLogin}}" method="post">
-        <input type="email" name="email" placeholder="email">
-        <input type="password" name="password" placeholder="password">
-        <input type="submit" value="Login">
-      </form>
       <div>
+        <form action="{{actionLogin}}" method="post">
+          <input type="email" name="email" placeholder="email" required>
+          <input type="password" name="password" placeholder="password" required>
+          <input type="submit" value="Login">
+        </form>
         <a href="/api/sessions/github"><button>Entrar con GitHub</button></a>
+        <a href="/api/recoverPass"><button>Restablecer contraseña</button></a>
       </div>
     </div>
+    {{#if change}}
+      <div>
+        <h3 style="color: red;">Contraseña actualizada con exito!</h3>
+      </div>
+    {{/if}}
     <div class="col-md-6">
       <h2>{{title_register}}</h2>
       <form action="{{actionRegister}}" method="post">
-        <input type="text" name="first_name" placeholder="name">
-        <input type="text" name="last_name" placeholder="last name">
-        <input type="email" name="email" placeholder="email">
-        <input type="age" name="age" placeholder="age">
-        <input type="password" name="password" placeholder="password">
+        <input type="text" name="first_name" placeholder="name" required>
+        <input type="text" name="last_name" placeholder="last name" required>
+        <input type="email" name="email" placeholder="email" required>
+        <input type="age" name="age" placeholder="age" required>
+        <input type="password" name="password" placeholder="password" required>
         <input type="submit" value="Registro">
       </form>
     </div>

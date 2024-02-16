@@ -6,6 +6,7 @@ import cartController from "../controllers/cart.controller.js";
 import emailRouter from "../controllers/email.controller.js";
 import mockingProductsRouter from "../controllers/mockingProducts.controller.js";
 import loggerTestController from "../controllers/loggerTest.controller.js";
+import recoveryController from "../controllers/recovery.controller.js";
 
 
 const router = (app) => {
@@ -18,6 +19,7 @@ const router = (app) => {
     app.use('/api/email', emailRouter);
     app.use('/', mockingProductsRouter );
     app.use('/loggerTest', loggerTestController );
+    app.use('/api/recoverPass', recoveryController)
 
 };
 
