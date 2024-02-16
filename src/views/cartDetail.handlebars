@@ -2,6 +2,8 @@
     {{#each cart}}
     <h1 data-cart-id={{this.id}} id="cartId">Carrito ID: {{this.id}}</h1>
     {{/each}}
+    <p>Email: {{user.email}}</p>
+    <input type="hidden" id="email" name="email" value="{{user.email}}">
     <div class="bloque">
         {{#each products}}
         <div class="tarjeta">

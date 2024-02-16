@@ -45,10 +45,12 @@ router.get('/change/:hash', async (req, res) => {
         const recovery = await recoveryService.getRecovery(hash);
         console.log("Recovery obtenido: ",recovery)
         ////Evaluamos si el mail se encuentra expirado
-        let fechaActual = new Date();
-        let expirado = recovery.fechaExpiracion < fechaActual;
-        if(expirado){
+        // let fechaActual = new Date();
+        // let expirado = recovery.fechaExpiracion < fechaActual;
+        //if(expirado){
+        if(!recovery){
             const recover = false;
+            const expirado = true;
             res.render('recoveryPassword', {
                 title: "Recuperacion de contraseña",
                 actionRecover: "/api/recoverPass",
@@ -66,6 +68,7 @@ router.get('/change/:hash', async (req, res) => {
             });
         }
     } catch (error) {
+        console.log(error);
         res.status(500).send('Error al procesar el mail de recuperación: ' + error.message);
     }
 })

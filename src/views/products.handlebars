@@ -43,6 +43,7 @@
     {{#if user}}
     <p>Bienvenido, {{user.first_name}}!</p>
     <p>Email: {{user.email}}</p>
+    <input type="hidden" id="email" name="email" value="{{user.email}}">
     <form action="/api/sessions/logout/" method="post" id="logoutForm">
         <button type="submit" title="logout">Logout</button>
     </form>
@@ -61,9 +62,11 @@
                 <p>Precio: {{lookup this 'price'}}</p>
                 <p>Stock: {{lookup this 'stock'}}</p>
                 <p>Categoría: {{lookup this 'category'}}</p>
+                <input type="hidden" id="owner{{lookup this 'id' }}" name="owner" value="{{lookup this 'owner'}}">
                 <a href="/api/products/{{lookup this 'id'}}">Ver Producto</a>
                 <button type="submit" id="addToCart" class="addToCart" value={{lookup this 'id' }}>Agregar al
                     carrito</button>
+                <div id="ProductoNoAgregado{{lookup this 'id' }}" style="color: rgb(124, 10, 10);"></div>
             </div>
             {{/each}}
         </div>
