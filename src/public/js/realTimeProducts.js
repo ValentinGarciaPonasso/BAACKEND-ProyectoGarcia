@@ -4,7 +4,22 @@ let socket = io.connect("http://localhost:8080", { forceNew: true });
 
 socket.on("productoActualizado", (products) => {
     console.log(products);
-    render(products);
+    let listaDeProductos = products
+    render(listaDeProductos);
+})
+
+socket.on("productoNoEliminado", (eliminado) => {
+    if (!eliminado) {
+        const noEliminado = document.getElementById('Eliminado');
+        noEliminado.innerHTML = '<h4>El usuario solo puede eliminar productos que le pertenezcan</h4>'
+    }
+})
+
+socket.on("productoEliminado", (eliminado) => {
+    if (eliminado) {
+        const noEliminado = document.getElementById('Eliminado');
+        noEliminado.innerHTML = '<h4>Producto eliminado con exito</h4>'
+    }
 })
 
 function render(products) {
@@ -43,7 +58,8 @@ function addProduct(e) {
         status: document.getElementById('available').value,
         stock: document.getElementById('stock').value,
         category: document.getElementById('category').value,
-        thumbnail: document.getElementById('thumbnail').value
+        thumbnail: document.getElementById('thumbnail').value,
+        owner: document.getElementById('owner').value
     }
     socket.emit("nuevoProducto", newProduct);                                     ///enviamos desde el cliente un mensaje
     return false;
@@ -51,7 +67,15 @@ function addProduct(e) {
 
 function deleteProduct(e) {
     console.log("Estoy en la funcion deleteProduct");
-    const deleteProduct = document.getElementById('id').value;
-    socket.emit("eliminarProducto", deleteProduct);                                     ///enviamos desde el cliente un mensaje
+    const deleteProductId = document.getElementById('id').value;
+    const role = document.getElementById('role').value;
+    const email = document.getElementById('owner').value;
+    let data = {
+        deleteProductId: deleteProductId,
+        email: email,
+        role: role
+    }
+    console.log(data)
+    socket.emit("eliminarProducto", data);                         ///enviamos desde el cliente un mensaje
     return false;
 };

@@ -1,52 +1,66 @@
+<div>
+    <h1>{{title}}</h1>
+    <h3>Usuario: {{email}}</h3>
+    <h3> Rol: {{role}}</h3>
+    <div class="form">
+        <h2>Agregar Producto:</h2>
+        <form onsubmit="return addProduct(this)">
+            <label for="title">Nombre:</label>
+            <input type="text" id="title" name="title" required>
+
+            <label for="description">Descripción:</label>
+            <input type="text" id="description" name="description" required>
+
+            <label for="code">Código:</label>
+            <input type="text" id="code" name="code" required>
+
+            <label for="price">Precio:</label>
+            <input type="text" id="price" name="price" required>
+
+            <label for="available">Available:</label>
+            <input type="text" id="available" name="available" required>
+
+            <label for="stock">Stock:</label>
+            <input type="text" id="stock" name="stock" required>
+
+            <label for="category">Categoria:</label>
+            <input type="text" id="category" name="category" required>
+
+            <label for="thumbnail">Imagen:</label>
+            <input type="file" id="thumbnail" name="thumbnail" accept="image/*" required><br>
+
+            <input type="hidden" id="role" name="role" value="{{role}}">
+
+            {{#if premium}}
+                <input type="hidden" id="owner" name="owner" value="{{email}}">
+            {{else}}
+                <input type="hidden" id="owner" name="owner" value="admin">
+            {{/if}}
+
+            <button type="submit" id="add_Button">Agregar Producto</button>
+        </form>
+    </div>
+
+    <div class="form">
+        <h2>Eliminar Producto</h2>
+        <form onsubmit="return deleteProduct(this)">
+            <label for="id">ID:</label>
+            <input type="number" id="id" name="id" required>
+            <button type="submit" id="delete_Button">Eliminar Producto</button>
+        </form>
+        <div id="Eliminado"></div>
+    </div>
+
     <div>
-        <h1>Productos en tiempo real</h1>
-        
-        <div class="form">
-            <h2>Agregar Producto:</h2>
-                <form onsubmit="return addProduct(this)">
-                    <label for="title">Nombre:</label>
-                    <input type="text" id="title" name="title" required>
-
-                    <label for="description">Descripción:</label>
-                    <input type="text" id="description" name="description" required>
-
-                    <label for="code">Código:</label>
-                    <input type="text" id="code" name="code" required>
-
-                    <label for="price">Precio:</label>
-                    <input type="text" id="price" name="price" required>
-
-                    <label for="available">Available:</label>
-                    <input type="text" id="available" name="available" required>
-
-                    <label for="stock">Stock:</label>
-                    <input type="text" id="stock" name="stock" required>
-
-                    <label for="category">Categoria:</label>
-                    <input type="text" id="category" name="category" required>
-
-                    <label for="thumbnail">Imagen:</label>
-                    <input type="file" id="thumbnail" name="thumbnail" accept="image/*" required><br>
-
-                    <button type="submit" id="add_Button">Agregar Producto</button>
-                </form>
-        </div>
-
-        <div class="form">
-            <h2>Eliminar Producto</h2>
-            <form onsubmit="return deleteProduct(this)">
-                <label for="id">ID:</label>
-                <input type="number" id="id" name="id" required>
-                <button type="submit" id="delete_Button">Eliminar Producto</button>
-            </form>
-        </div>
-        
+        <h2>Listado de Productos:</h2>
         <div>
-            <h2>Listado de Productos:</h2>
-            <div>
-                <div class="bloque" id="productList"></div>
-            </div>
+            <div class="bloque" id="productList"></div>
         </div>
     </div>
-    <script type="text/javascript" src="/js/realTimeProducts.js"></script>
 
+
+    <div>
+        <a href="/api/sessions/current">Vovler</a>
+    </div>
+</div>
+<script type="text/javascript" src="/js/realTimeProducts.js"></script>

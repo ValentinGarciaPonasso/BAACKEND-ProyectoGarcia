@@ -24,6 +24,7 @@ import * as productService from "./services/product.service.js";
 import * as cartService from "./services/cart.service.js";
 import errorHandler from "./middlewares/error/handle.error.js";
 import { addLogger } from './middlewares/logger.middleware.js';
+import { passportCall} from "./utilitis.js";
 
 const port = 8080;
 const app = express();
@@ -79,6 +80,7 @@ io.on('connection', async (socket) => {
     console.log("Un cliente se ha conectado");
     try {
         const productos = await productService.getAll();
+        
         await io.emit("productoActualizado", productos);
     } catch (error) {
         console.error("Error al obtener producto:", error);
@@ -87,21 +89,32 @@ io.on('connection', async (socket) => {
         console.log("Nuevo producto recibido:");
         console.log(newProduct);
         try {
-            await productService.addProduct(newProduct.title, newProduct.description, newProduct.code, newProduct.price, newProduct.status, newProduct.stock, newProduct.category, newProduct.thumbnail);
+            await productService.addProduct(newProduct.title, newProduct.description, newProduct.code, newProduct.price, newProduct.status, newProduct.stock, newProduct.category, newProduct.thumbnail, newProduct.owner);
             const productos = await productService.getAll();
             await io.emit("productoActualizado", productos);
         } catch (e) {
             console.error("Error al agregar producto:", error);
         };
     });
-    socket.on("eliminarProducto", async (deleteProduct) => {
-        console.log("Nuevo producto a eliminar:");
-        console.log(deleteProduct);
-        const id = parseInt(deleteProduct, 10)
+    socket.on("eliminarProducto", async (data) => {
+        const id = parseInt(data.deleteProductId, 10)
         try {
-            await productService.removeProduct(id);
-            const productos = await productService.getAll();
-            io.emit("productoActualizado", productos);
+            let prductToRemove = await productService.getByID(id);
+            console.log(prductToRemove);
+            console.log("Owner producto a eliminar: " + prductToRemove[0].owner);
+            console.log("usuario logeado:" + data.email);
+            console.log("role de usuario: " + data.role);
+            if (prductToRemove[0].owner === data.email || data.role === "admin") {
+                await productService.removeProduct(id);
+                const productos = await productService.getAll();
+                io.emit("productoActualizado", productos);
+                let eliminado = true;
+                io.emit("productoEliminado", eliminado);
+            } else {
+                console.log("El usuario no cuenta con permisos para eliminar el producto");
+                let eliminado = false
+                io.emit("productoNoEliminado", eliminado);
+            }
         } catch (e) {
             console.error("Error al eliminar producto:", e);
         };

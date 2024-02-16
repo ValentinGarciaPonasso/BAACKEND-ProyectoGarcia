@@ -1,7 +1,7 @@
 import { Router } from "express";
 import * as recoveryService from "../services/recovery.service.js";
 import * as userServices from "../services/user.service.js"
-import {createHash} from "../utilitis.js";
+import {createHash,isValidPassword} from "../utilitis.js";
 
 const router = new Router();
 
@@ -73,22 +73,23 @@ router.get('/change/:hash', async (req, res) => {
 router.post('/change', async (req, res) => {
     console.log(req.body);
     const email = req.body.email;
-    const password = createHash (req.body.password);
+    ///Evaluamos que no use la misma contraseña
+    const password = req.body.password;
+    let user = await userServices.getOne(email)
+    if (isValidPassword(user, password)){
+        return res.status(401).send({
+            status: "error",
+            error: "No puede repetir la contraseña"
+        })
+    }
+    const hashedPassword = createHash(password)
     try {
-        const user = await userServices.modifyPass(password, email);
+        const user = await userServices.modifyPass(hashedPassword, email);
         if (!user) {
             return res.status(404).json({ message: "Usuario no encontrado" });
         };
         let change = true;
         console.log(user + " change " + change);
-        //res.status(201).redirect("/");
-        // res.render('login', {
-        //     title: "Inicio de sesión",
-        //     title_register: "Registro",
-        //     actionRegister: "/api/sessions/register/",
-        //     actionLogin: "/api/sessions/login/",
-        //     change: change
-        // });
         let data = {
             layout: "login",
             title: "Inicio de sesión",

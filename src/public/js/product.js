@@ -39,7 +39,3 @@ function deleteFromCart(event) {
     return false;
 }
 
-// socket.on("productList", (products) => {
-//     console.log("Products desde el back: ", products)
-//     console.log("Products desde el front: ", product);
-// })

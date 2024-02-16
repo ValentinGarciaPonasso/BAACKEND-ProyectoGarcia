@@ -18,7 +18,7 @@ const getByID = (id) => {
     return Product.getByIdDao(id);
 };
 
-const addProduct = async (title, description, code, price, available, stock, category, thumbnail) => {
+const addProduct = async (title, description, code, price, available, stock, category, thumbnail, owner) => {
 
     try {
         /// Validamos que los campos sean obligatorios
@@ -43,7 +43,8 @@ const addProduct = async (title, description, code, price, available, stock, cat
             available,
             stock,
             category,
-            thumbnail
+            thumbnail,
+            owner
         };
         console.log("Productos en el manager", newProduct);
         console.log("Productos en el manager", products);

@@ -131,7 +131,7 @@ router.get('/current', passportCall ('jwt'), (req, res) => {
     let userData = req.user.user;
     req.logger.info("Acceso correcto a current");
     let admin = false;
-    if (userData.role === 'admin') {
+    if (userData.role === 'admin' || userData.role === 'premium') {
         admin = true;
     }
     res

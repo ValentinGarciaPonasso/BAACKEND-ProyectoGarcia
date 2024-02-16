@@ -15,8 +15,15 @@ const router = new Router();
 router.get('/realTimeProducts', passportCall ('jwt'), async (req, res) => {
     try {
         const product = await productService.getAll();
-        console.log ("Productos dedsde router: " + product)
+        let userData = req.user.user;
+        let premium = false;
+        if (userData.role === 'premium') {
+            premium = true;
+        }
         res.render('index', {
+            premium: premium,
+            email: userData.email,
+            role: userData.role,
             product: product,
             title: "Productos en tiempo Real"
         })
