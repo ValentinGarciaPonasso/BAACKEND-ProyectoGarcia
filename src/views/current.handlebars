@@ -9,6 +9,9 @@
         <a href="/api/products" title="products">Ver Productos</a>
         {{#if admin}}
         <a href="/api/productos/realTimeProducts" title="admin">Administracion de productos</a>
+        {{#if isAdmin}}
+            <a href="/api/users" title="adminUser">Administracion de usuarios</a>
+        {{/if}}
         {{/if}}
         <form action="/api/sessions/logout/" method="post" id="logoutForm">
             <button type="submit" title="logout">Logout</button>

@@ -74,7 +74,6 @@ router.get('/change/:hash', async (req, res) => {
 })
 
 router.post('/change', async (req, res) => {
-    console.log(req.body);
     const email = req.body.email;
     ///Evaluamos que no use la misma contraseña
     const password = req.body.password;

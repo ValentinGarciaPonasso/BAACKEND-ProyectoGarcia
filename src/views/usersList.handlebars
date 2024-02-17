@@ -1,0 +1,39 @@
+<style>
+    .bloqueado {
+        background-color: #8b8686;
+        color: black;
+        font-weight: bold;
+        border: none;
+        padding: 8px;
+        border-radius: 10px;
+    }
+</style>
+
+<div>
+    <h1>{{title}}</h1>
+    {{#if rolActualizado}}
+    <h2 style="color: brown;">Rol actualizado correctamente</h2>
+    {{/if}}
+    <div class="bloque">
+        {{#each users}}
+        <div class="tarjeta">
+            <form id="editUserForm" action="/api/users/premium/{{this.email}}" method="post">
+                <p>Nombre: <input type="text" name="first_name" value="{{this.first_name}}" class="bloqueado" readonly></p>
+                <p>Apellido: <input type="text" name="last_name" value="{{this.last_name}}" class="bloqueado" readonly></p>
+                <p>Mail: <input type="email" name="email" value="{{this.email}}" class="bloqueado" readonly></p>
+                <p>Edad: <input type="number" name="age" value="{{this.age}}" class="bloqueado" readonly></p>
+                <p>Rol: <input type="text" name="currentRole" value="{{this.role}}" class="bloqueado" readonly></p>
+                <p>
+                    Nuevo Rol:
+                    <select name="role">
+                        <option value="user">User</option>
+                        <option value="premium">Premium</option>
+                    </select>
+                </p>
+                <input type="submit" value="Guardar">
+            </form>
+        </div>
+        {{/each}}
+    </div>
+    <a href="/api/sessions/current">Vovler</a>
+</div>

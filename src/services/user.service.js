@@ -2,8 +2,8 @@ import UserDAO from "../dao/users.dao.js";
 
 const Users = new UserDAO();
 
-const getAll = (username) => {
-    return Users.getAll(username);
+const getAll = () => {
+    return Users.getAll();
 };
 
 const getOne = (username) => {
@@ -15,7 +15,11 @@ const create = (newUser) => {
 };
 
 const modifyPass = (pass, userEmail) => {
-    return Users.update(pass, userEmail);
+    return Users.updatePass(pass, userEmail);
 };
 
-export { getAll, getOne, create, modifyPass }
+const modfyRole = (role, userEmail) => {
+    return Users.updateRole(role, userEmail);
+};
+
+export { getAll, getOne, create, modifyPass, modfyRole }

@@ -53,7 +53,7 @@ class UserDao {
         }
     };
 
-    async update(pass, userEmail) {
+    async updatePass(pass, userEmail) {
         try {
             const usuarioActualizado = await userModel.findOneAndUpdate(
                 { email: userEmail }, 
@@ -64,6 +64,24 @@ class UserDao {
                 console.log("Contraseña actualizada con éxito: ", usuarioActualizado);
             } else {
                 console.log(`No se encontró ningún usuario con el correo electrónico proporcionado (${email}).`);
+            }
+            return usuarioActualizado;
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    async updateRole(role, userEmail) {
+        try {
+            const usuarioActualizado = await userModel.findOneAndUpdate(
+                { email: userEmail }, 
+                { $set: { role: role } }, 
+                { new: true } 
+            );
+            if (usuarioActualizado) {
+                console.log ("Rol actualizada con éxito: ", usuarioActualizado);
+            } else {
+                console.log (`No se encontró ningún usuario con el correo electrónico proporcionado (${email}).`);
             }
             return usuarioActualizado;
         } catch (error) {

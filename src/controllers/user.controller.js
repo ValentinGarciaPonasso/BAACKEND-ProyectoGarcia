@@ -116,7 +116,6 @@ router.post ("/login", async (req, res) => {
         };
     } catch (error) {
         req.logger.error("Error credenciales inválidas", error);
-        //console.log("Error credenciales inválidas", error);
         return res.redirect("/");
     }
 });
@@ -131,8 +130,12 @@ router.get('/current', passportCall ('jwt'), (req, res) => {
     let userData = req.user.user;
     req.logger.info("Acceso correcto a current");
     let admin = false;
+    let isAdmin = false;
     if (userData.role === 'admin' || userData.role === 'premium') {
         admin = true;
+        if(userData.role === 'admin'){
+            isAdmin = true;
+        }
     }
     res
         .status(200)
@@ -140,6 +143,7 @@ router.get('/current', passportCall ('jwt'), (req, res) => {
         .render('current', {
             user: userData,
             admin: admin,
+            isAdmin: isAdmin,
             title: "Current",
         })
 });
