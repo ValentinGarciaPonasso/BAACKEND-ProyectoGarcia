@@ -1,0 +1,139 @@
+openapi: "3.0.1"
+info:
+  title: API Cart
+  version: "1.0"
+paths:
+  /api/cart/createCart:
+    get:
+      summary: Crea el carrito asociado al nuevo usuario registrado
+      tags:
+        - New Cart
+      responses:
+        "200":
+          description: Crea el carrito y redirige a current
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Cart"
+  /api/cart/{cid}:
+    get:
+      summary: Obtienes un carrito por id
+      tags:
+        - Cart id
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: Id del carrito que buscas
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Carrito encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cart"
+    put:
+      summary: Actualiza un carrito por su id
+      tags:
+        - Cart
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: Id del carrito que buscas
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/requestBodies/UpdateCart"
+
+  # Agregar /:cid/productos/:pid   put y post
+
+components:
+  schemas:
+    Cart:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Id de mongo
+        id:
+          type: number
+          description: Id del carrito
+        username:
+          type: object
+          description: Usuario propietario del carrito
+          properties: 
+            _id: 
+              type: string
+              description: id de mongo
+            email:
+              type: string
+              description: email del usuario
+        products:
+          type: array
+          description: productos dentro del carrito
+          items:
+            type: object
+            properties:
+              quantity: 
+                type: number
+                description: cant. de productos
+              id:
+                type: number
+                description: id del producto
+              _id:
+                type: string
+                description: id de mongo
+        total: 
+          type: number
+          description: monto total
+      example:
+        _id: ObjectId("65c5d89b7b2d1640e225c3f9")
+        id: 8
+        username: 
+          _id: 65c5d89a7b2d1640e225c3f5
+          email: prueba8@prueba.com
+        products: []
+        total: 0
+  requestBodies:
+    UpdateCart:
+      description: Body con la info a actualizar
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              products:
+                type: array
+                description: productos dentro del carrito
+                items:
+                  type: object
+                  properties:
+                    quantity: 
+                      type: number
+                      description: cant. de productos
+                    id:
+                      type: number
+                      description: id del producto
+                    _id:
+                      type: string
+                      description: id de mongo
+      example:
+        products: [
+          {
+              "id": 1,
+              "quantity": 6
+          },
+          {
+              "id": 6,
+              "quantity": 4
+          }
+        ]

@@ -1,7 +1,7 @@
 import express from 'express';
 import loginRouter from './routes/login.js';
 import registerRouter from './routes/register.js';
-import profileRouter from  './routes/profile.js';
+import profileRouter from './routes/profile.js';
 import _dirname from './utilitis.js';
 import "dotenv/config.js";
 import handlebars from 'express-handlebars';
@@ -24,7 +24,10 @@ import * as productService from "./services/product.service.js";
 import * as cartService from "./services/cart.service.js";
 import errorHandler from "./middlewares/error/handle.error.js";
 import { addLogger } from './middlewares/logger.middleware.js';
-import { passportCall} from "./utilitis.js";
+import { passportCall } from "./utilitis.js";
+import swaggerJsdoc from 'swagger-jsdoc'
+import swaggerUiExpress from 'swagger-ui-express'
+import __dirname from './utilitis.js';
 
 const port = 8080;
 const app = express();
@@ -37,13 +40,35 @@ const cartManagerMongo = new CartManagerMongo();
 
 //Estructura Handlebars
 const hbs = handlebars.create({
-    defaultLayout: 'main', 
-    extname: '.handlebars', 
+    defaultLayout: 'main',
+    extname: '.handlebars',
     runtimeOptions: {
         allowProtoPropertiesByDefault: true,
         allowProtoMethodsByDefault: true,
     },
 });
+
+
+
+///SWAGGER
+const swaggerOptions = {
+    definition: {
+        openapi: "3.0.1",
+        info: {
+            title: "Documentación para el proyecto de ecommerce",
+            description: "Documentación del proyecto ecommerce, endpoints de cart y product"
+        },
+    },
+    apis: [`${__dirname}/docs/**/*.yaml`]
+
+}
+const specs = swaggerJsdoc(swaggerOptions)
+app.use('/apidocs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs))
+console.log(specs)
+
+
+///////////////////////
+
 app.engine('handlebars', hbs.engine);
 app.set('views', `${_dirname}/views`);
 app.set('view engine', 'handlebars');
@@ -59,12 +84,12 @@ app.use(cookieParser());
 
 app.use(session({
     secret: process.env.hash,
-    resave: false, 
-    saveUninitialized: true, 
+    resave: false,
+    saveUninitialized: true,
     store: MongoStore.create({
         mongoUrl: process.env.mongo,
 
-        ttl: 2 * 60, 
+        ttl: 2 * 60,
     }),
 }));
 
@@ -80,7 +105,7 @@ io.on('connection', async (socket) => {
     console.log("Un cliente se ha conectado");
     try {
         const productos = await productService.getAll();
-        
+
         await io.emit("productoActualizado", productos);
     } catch (error) {
         console.error("Error al obtener producto:", error);
@@ -127,7 +152,7 @@ io.on('connection', async (socket) => {
             console.log(`Buscamos producto con id ${productAddedId}: `, product);
             if (product) {
                 const newCarrito = await cartService.addProductToCart(cartId, product);
-                console.log(`Nuevo carrito: ` ,newCarrito);
+                console.log(`Nuevo carrito: `, newCarrito);
             } else {
                 console.log("No se encontró producto")
             }
@@ -143,7 +168,7 @@ io.on('connection', async (socket) => {
             console.log(`Id producto a eliminar:  ${productId} `);
             console.log(`Id carrito a modificar:  ${cartId} `);
             const newCarrito = await cartService.deleteProduct(cartId, productId);
-            console.log(`Nuevo carrito: ` ,newCarrito);
+            console.log(`Nuevo carrito: `, newCarrito);
             io.emit("carritoActualizado", newCarrito);
 
         } catch (e) {
@@ -158,7 +183,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 //MIDLEWARE PARA MANEJO DE LOGGER
-app.use (addLogger);
+app.use(addLogger);
 
 //ROUTER
 router(app);
