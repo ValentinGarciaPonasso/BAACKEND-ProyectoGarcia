@@ -1,0 +1,189 @@
+openapi: "3.0.1"
+info:
+  title: API Products
+  version: "1.0"
+paths:
+  /api/products/all:
+    get:
+      summary: Obtiene todos los productos para renderizarlos.
+      tags:
+        - Products
+      responses:
+        "200":
+          description: Obtiene todos los productos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+  /api/products/{id}:
+    get:
+      summary: Obtienes un producto por id
+      tags:
+        - Product id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Id del producto que buscas
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Producto encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+    put:
+      summary: Actualiza un producto por su id
+      tags:
+        - Product id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Id del producto que buscas
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/requestBodies/Product"
+
+
+  /api/products:
+    get:
+      summary: Obtiene todos los productos con paginación para renderizarlos
+      tags:
+        - Products
+      responses:
+        "200":
+          description: Productos obtenidos
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+    post:
+      summary: Agrega un producto a la BD
+      tags:
+        - Products
+      responses:
+        "200":
+          description: Producto agregado al carrito
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/requestBodies/Product"
+
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        id:
+          type: number
+          required: true
+        title:
+          type: string
+          required: true
+        description:
+          type: string
+          required: true
+        code:
+          type: string
+          required: true
+        price:
+          type: number
+          required: true
+        available:
+          type: boolean
+          default: true
+          required: true
+        stock:
+          type: number
+          required: true
+        category:
+          type: string
+          required: true
+        thumbnail:
+          type: string
+          required: true
+        owner:
+          type: string
+          default: admin
+          required: true
+      example:
+        _id: ObjectId('65cfb26ae634fc474ba40f54')
+        id: 13
+        title: prueba
+        description: prueba
+        code: prueba
+        price: 1500
+        available: true
+        stock: 96
+        category: prueba
+        thumbnail: "C:\\fakepath\\image.jpg"
+        owner: vgarciaponasso@gmail.com
+  requestBodies:
+    Product:
+      description: Body con la info a actualizar
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id:
+                type: number
+                required: true
+              title:
+                type: string
+                required: true
+              description:
+                type: string
+                required: true
+              code:
+                type: string
+                required: true
+              price:
+                type: number
+                required: true
+              available:
+                type: boolean
+                default: true
+                required: true
+              stock:
+                type: number
+                required: true
+              category:
+                type: string
+                required: true
+              thumbnail:
+                type: string
+                required: true
+              owner:
+                type: string
+                default: admin
+                required: true
+      example:
+        product: [
+          {
+            "title":"Camiseta Futbol 3",
+            "description":"Nueva camiseta temporada 2023",
+            "code":"CF103",
+            "price":5000,
+            "available":true,
+            "stock":500,
+            "category":"Camisetas",
+            "thumbnail":"www.img.com"
+          }
+        ]

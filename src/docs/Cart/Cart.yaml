@@ -39,7 +39,7 @@ paths:
     put:
       summary: Actualiza un carrito por su id
       tags:
-        - Cart
+        - Cart id
       parameters:
         - name: cid
           in: path
@@ -54,7 +54,68 @@ paths:
             schema:
               $ref: "#/components/requestBodies/UpdateCart"
 
-  # Agregar /:cid/productos/:pid   put y post
+
+  /api/cart/{cid}/productos/{pid}:
+    post:
+      summary: Agrega un producto al carrito por sus id
+      tags:
+        - Cart
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: Id del carrito que buscas
+          schema:
+            type: string
+        - name: pid
+          in: path
+          required: true
+          description: Id del producto a agregar
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Producto agregado al carrito
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cart"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/requestBodies/UpdateCart"
+    put:
+      summary: Actualiza un producto de un carrito por su id
+      tags:
+        - Cart
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: Id del carrito que buscas
+          schema:
+            type: string
+        - name: pid
+          in: path
+          required: true
+          description: Id del producto a actualizar
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Producto actualizado en el carrito
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cart"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/requestBodies/UpdateCart"
 
 components:
   schemas:
