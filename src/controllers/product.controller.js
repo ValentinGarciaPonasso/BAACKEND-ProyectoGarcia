@@ -59,7 +59,7 @@ router.post('/', async (req, res) => {
 
         const newProducts = await productService.addProduct(newProduct.title, newProduct.description, newProduct.code, newProduct.price, newProduct.available, newProduct.stock, newProduct.category, newProduct.thumbnail);
         res.status(200).json({
-            massage: "Producto agregado",
+            message: "Producto agregado",
             data: newProducts
         });
     } catch (error) {

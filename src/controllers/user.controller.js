@@ -120,7 +120,7 @@ router.post ("/login", async (req, res) => {
     }
 });
 
-//Logut(hacer se encuentra a medias)
+//Logut
 
 router.post("/logout", logOut);
 
