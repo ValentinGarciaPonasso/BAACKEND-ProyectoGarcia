@@ -14,6 +14,11 @@ const userSchema = new Schema ({
         default: "user",
     },
     cart: Number,
+    documents: [{
+        name: String,
+        reference: String
+    }],
+    last_connection: String,
 });
 
 const userModel = model(userCollection, userSchema);
