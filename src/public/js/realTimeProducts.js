@@ -1,7 +1,14 @@
-const backendUrl = process.env.BACKEND_URL || "http://localhost:8080"
-let socket = io.connect(backendUrl, { forceNew: true });
+// let socket = io.connect("http://localhost:8080", { forceNew: true });
 
-
+fetch('/config')
+    .then(response => response.json())
+    .then(data => {
+        const backendUrl = data.backendUrl;
+        let socket = io.connect(backendUrl, { forceNew: true });
+    })
+    .catch(error => {
+        console.error('Error al obtener la configuración del backend:', error);
+    });
 
 socket.on("productoActualizado", (products) => {
     console.log(products);

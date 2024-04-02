@@ -8,6 +8,7 @@ import mockingProductsRouter from "../controllers/mockingProducts.controller.js"
 import loggerTestController from "../controllers/loggerTest.controller.js";
 import recoveryController from "../controllers/recovery.controller.js";
 import usersListController from "../controllers/usersList.controller.js";
+import configController from "../controllers/config.controller.js";
 
 
 const router = (app) => {
@@ -21,7 +22,8 @@ const router = (app) => {
     app.use('/', mockingProductsRouter );
     app.use('/loggerTest', loggerTestController );
     app.use('/api/recoverPass', recoveryController);
-    app.use('/api/users', usersListController)
+    app.use('/api/users', usersListController);
+    app.use('/config', configController);
 };
 
 export default router;
