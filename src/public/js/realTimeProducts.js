@@ -2,7 +2,12 @@
 let socket = null;
 
 fetch('/config')
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Error al obtener la configuración del backend');
+        }
+        return response.json();
+    })
     .then(data => {
         const backendUrl = data.backendUrl;
         socket = io.connect(backendUrl, { forceNew: true });
