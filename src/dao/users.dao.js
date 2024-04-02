@@ -87,7 +87,33 @@ class UserDao {
         } catch (error) {
             throw error;
         }
-    }
+    };
+
+    async updateConection (conection, userEmail) {
+        try {
+            const usuarioActualizado = await userModel.findOneAndUpdate(
+                { email: userEmail }, 
+                { $set: { last_connection: conection } }, 
+                { new: true } 
+            );
+            if (usuarioActualizado) {
+                console.log ("Última conexión actualizada con éxito: ", usuarioActualizado);
+            } else {
+                console.log (`No se encontró ningún usuario con el correo electrónico proporcionado (${email}).`);
+            }
+            return usuarioActualizado;
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    async deleteOne(username) {
+        try {
+            return await userModel.deleteOne({email: username})
+        } catch (e) {
+            throw e;
+        }
+    };
 }
 
 export default UserDao;

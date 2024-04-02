@@ -58,4 +58,81 @@ const sendEmail = async (ticket) => {
     }
 }
 
-export { sendEmail };
+const sendNotification = async (userEmail, inactividad) => {
+    try {
+        console.log("user desde emailServices. " + userEmail);
+        const from = emailConfig.emailUser;
+        const subject = `Eliminación de usuario ${userEmail}`
+        const to = userEmail;
+        let html = '';
+        if (inactividad) {
+            html = `
+            <html>
+            <div>
+            <h1>Aviso de eliminación de usuario</h1>
+            <p>Estimado, ${userEmail} su usuario ha sido eliminado por inactividad, puede registrarse nuevamente accedidendo al siguiente enlace:</p>
+            <p></p>
+            </div>
+            </html>
+            `
+        } else {
+            html = `
+            <html>
+            <div>
+            <h1>Aviso de eliminación de usuario</h1>
+            <p>Estimado, ${userEmail} su usuario ha sido eliminado, puede registrarse nuevamente accedidendo al siguiente enlace:</p>
+            <p></p>
+            </div>
+            </html>
+            `
+        }
+        console.log("from " + from + " to " + to + " subject " + subject);
+        console.log(html);
+        const email = {
+            from: from,
+            to: to,
+            subject: subject,
+            html: html,
+        };
+        const result = await transport.sendMail(email);
+        console.log(result);
+        return result;
+    } catch (e) {
+        console.log(e);
+        throw e;
+    }
+};
+
+const sendProductNotification = async (product) => {
+    try {
+        console.log("prooduct desde emailServices. " + product);
+        const from = emailConfig.emailUser;
+        const subject = `Eliminación de producto: ${product.title}`
+        const to = product.owner;
+        let html = `
+            <html>
+                <div>
+                    <h1>Aviso de eliminación de producto</h1>
+                    <p>Estimado, ${product.owner} su producto ${product.title} con código ${product.code} ha sido eliminado.</p>
+                    <p></p>
+                </div>
+            </html>
+        `
+        console.log("from " + from + " to " + to + " subject " + subject);
+        console.log(html);
+        const email = {
+            from: from,
+            to: to,
+            subject: subject,
+            html: html,
+        };
+        const result = await transport.sendMail(email);
+        console.log(result);
+        return result;
+    } catch (e) {
+        console.log(e);
+        throw e;
+    }
+};
+
+export { sendEmail, sendNotification, sendProductNotification };

@@ -47,7 +47,8 @@ router.post("/register", async (req, res) => {
                 last_name: last_name,
                 email: email,
                 age: age,
-                password: createHash(password)
+                password: createHash(password),
+                last_connection: new Date()
             };
             let result = await userServices.create(newUser)
         }
@@ -105,6 +106,9 @@ router.post ("/login", async (req, res) => {
                     error: "Usuario y/o contraseña incorrecta 2"
                 })
             delete user.password
+            let connectionTime = new Date();
+            let result = await userServices.modifyConection (connectionTime, email);
+
             let token = generateToken(user);
     
             res

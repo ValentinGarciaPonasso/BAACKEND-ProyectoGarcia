@@ -6,11 +6,22 @@
         <p>Bienvenido, {{user.first_name}} {{user.last_name}}!</p>
         <p>Email: {{user.email}}</p>
         <p>Edad: {{user.age}}</p>
+        {{!-- subir documentos --}}
+        <h3>Subir Documentos</h3>
+        <form action="/api/users/premium/{{user.email}}/documents" method="POST" enctype="multipart/form-data">
+            <label for="perfil">Perfil:</label>
+            <input type="file" name="perfil" id="perfil"><br>
+            <label for="productos">Productos:</label>
+            <input type="file" name="productos" id="productos" multiple><br>
+            <label for="otros">Otros Documentos:</label>
+            <input type="file" name="documentos" id="otros" multiple><br>
+            <input type="submit" value="Subir Documentos">
+        </form>
         <a href="/api/products" title="products">Ver Productos</a>
         {{#if admin}}
         <a href="/api/productos/realTimeProducts" title="admin">Administracion de productos</a>
         {{#if isAdmin}}
-            <a href="/api/users" title="adminUser">Administracion de usuarios</a>
+        <a href="/api/users" title="adminUser">Administracion de usuarios</a>
         {{/if}}
         {{/if}}
         <form action="/api/sessions/logout/" method="post" id="logoutForm">

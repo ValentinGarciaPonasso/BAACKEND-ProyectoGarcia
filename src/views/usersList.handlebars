@@ -14,12 +14,17 @@
     {{#if rolActualizado}}
     <h2 style="color: brown;">Rol actualizado correctamente</h2>
     {{/if}}
+    {{#if usuarioEliminado}}
+        <h2 style="color: brown;">Usuario Eliminado</h2>
+    {{/if}}
     <div class="bloque">
         {{#each users}}
         <div class="tarjeta">
             <form id="editUserForm" action="/api/users/premium/{{this.email}}" method="post">
-                <p>Nombre: <input type="text" name="first_name" value="{{this.first_name}}" class="bloqueado" readonly></p>
-                <p>Apellido: <input type="text" name="last_name" value="{{this.last_name}}" class="bloqueado" readonly></p>
+                <p>Nombre: <input type="text" name="first_name" value="{{this.first_name}}" class="bloqueado" readonly>
+                </p>
+                <p>Apellido: <input type="text" name="last_name" value="{{this.last_name}}" class="bloqueado" readonly>
+                </p>
                 <p>Mail: <input type="email" name="email" value="{{this.email}}" class="bloqueado" readonly></p>
                 <p>Edad: <input type="number" name="age" value="{{this.age}}" class="bloqueado" readonly></p>
                 <p>Rol: <input type="text" name="currentRole" value="{{this.role}}" class="bloqueado" readonly></p>
@@ -32,8 +37,62 @@
                 </p>
                 <input type="submit" value="Guardar">
             </form>
+            <button type="submit" id="deleteUser" class="deleteUser" value={{lookup this 'email' }}>Eliminar
+                usuario</button>
         </div>
         {{/each}}
     </div>
-    <a href="/api/sessions/current">Vovler</a>
+    <br>
+    <div>
+        <button id="deleteAllButton">Eliminar usuarios inactivos</button>
+    </div>
+    <br>
+    <div>
+        <a href="/api/sessions/current">Vovler</a>
+    </div>
 </div>
+
+
+
+<script>
+    document.getElementById("deleteAllButton").addEventListener("click", function () {
+        fetch("/api/users/", {
+            method: "DELETE"
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("No se pudo eliminar los usuarios");
+                } else {
+                    location.reload();
+                }
+            })
+            .catch(error => {
+                console.error("Error al eliminar los usuarios:", error);
+            });
+    });
+
+    document.querySelectorAll('.deleteUser').forEach(button => {
+        button.addEventListener('click', function (event) {
+            deleteUser(event);
+        });
+    });
+
+
+    function deleteUser(event) {
+        const userDelete = event.target.value;
+        console.log("Usuario a borrar: " + userDelete);
+        fetch(`/api/users/${userDelete}`, {
+            method: "DELETE"
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("No se pudo eliminar el usuario");
+                } else {
+                    location.reload();
+                }
+            })
+            .catch(error => {
+                console.error("Error al eliminar el usuario:", error);
+            });
+    }
+</script>

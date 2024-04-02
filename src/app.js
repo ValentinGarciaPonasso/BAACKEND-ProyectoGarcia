@@ -10,6 +10,7 @@ import { Server } from 'socket.io';
 import ProductManager from "./dao/ProductManager.js";
 import ProductManagerMongo from "./dao/ProductManagerMongo.js";
 import CartManagerMongo from './dao/CartManagerMongo.js';
+import * as emailService from "./services/email.service.js";
 import cookieParser from 'cookie-parser';
 import MongoStore from 'connect-mongo';
 import session from 'express-session';
@@ -29,7 +30,7 @@ import swaggerJsdoc from 'swagger-jsdoc'
 import swaggerUiExpress from 'swagger-ui-express'
 import __dirname from './utilitis.js';
 
-const port = 8080;
+const port = process.env.PORT || 8080;
 const app = express();
 
 
@@ -132,6 +133,9 @@ io.on('connection', async (socket) => {
             if (prductToRemove[0].owner === data.email || data.role === "admin") {
                 await productService.removeProduct(id);
                 const productos = await productService.getAll();
+                if(prductToRemove[0].owner !== "admin") {
+                    let notification = emailService.sendProductNotification(prductToRemove[0]);
+                }
                 io.emit("productoActualizado", productos);
                 let eliminado = true;
                 io.emit("productoEliminado", eliminado);

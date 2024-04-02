@@ -14,13 +14,27 @@ export const isValidPassword = (user, password) =>
 
 const storage = multer.diskStorage({
     destination: (req, res, cb) => {
-        cb(null, './src/public/img')
+        console.log("Entro a storage");
+        let type = '';
+        let uploadPath = ''; // ruta de destino inicial
+        if (file.fieldname === 'perfil') {
+            uploadPath = 'public/files/profile/'; // si es una imagen, guardar en la carpeta de profile
+            type = 'profile';
+        } else if (file.fieldname === 'productos') {
+            uploadPath = 'public/files/products/'; // si es un video, guardar en la carpeta de products
+            type = 'products';
+        } else {
+            uploadPath = 'public/files/documents/'; // para cualquier otro tipo de archivo, guardar en una carpeta documents
+            type = 'documents';
+        }
+        cb(null, uploadPath); // pasar la ruta de destino al callback
+        // cb(null, './src/public/img')
     },
     filename: (req, file, cb) => {
         const tiimestamp = Date.now();
         const originName = file.originalname;
         const extension = originName.split('.').pop();
-        const filename = `${tiimestamp}-clase8.${extension}`;
+        const filename = `${type}-${tiimestamp}.${extension}`;
         cb(null, filename);
     }
 });

@@ -33,7 +33,9 @@ const addProduct = async (title, description, code, price, available, stock, cat
             })
         };
 
-        const id = products.length + 1;
+        // const id = products.length + 1;
+        const id = products[products.length - 1].id + 1;
+        console.log("ID: " + id);
         const newProduct = {
             id,
             title,
