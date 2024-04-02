@@ -1,4 +1,5 @@
-let socket = io.connect("http://localhost:8080", { forceNew: true });
+const backendUrl = process.env.BACKEND_URL || "http://localhost:8080"
+let socket = io.connect(backendUrl, { forceNew: true });
 
 
 
