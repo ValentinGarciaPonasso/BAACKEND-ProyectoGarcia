@@ -6,15 +6,17 @@ fetch('/config')
     .then(data => {
         const backendUrl = data.backendUrl;
         socket = io.connect(backendUrl, { forceNew: true });
+
+        socket.on("carritoActualizado", (newCarrito) => {
+            console.log(newCarrito);
+            location.reload();
+            })
     })
     .catch(error => {
         console.error('Error al obtener la configuración del backend:', error);
     });
 
-socket.on("carritoActualizado", (newCarrito) => {
-    console.log(newCarrito);
-    location.reload();
-    })
+
 
 console.log("Me encuentro en product.js")
 const cartIdElement = document.getElementById('cartId');

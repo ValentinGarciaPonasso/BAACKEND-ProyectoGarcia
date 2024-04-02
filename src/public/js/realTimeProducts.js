@@ -6,30 +6,33 @@ fetch('/config')
     .then(data => {
         const backendUrl = data.backendUrl;
         socket = io.connect(backendUrl, { forceNew: true });
+
+
+        socket.on("productoActualizado", (products) => {
+            console.log(products);
+            let listaDeProductos = products
+            render(listaDeProductos);
+        })
+        
+        socket.on("productoNoEliminado", (eliminado) => {
+            if (!eliminado) {
+                const noEliminado = document.getElementById('Eliminado');
+                noEliminado.innerHTML = '<h4>El usuario solo puede eliminar productos que le pertenezcan</h4>'
+            }
+        })
+        
+        socket.on("productoEliminado", (eliminado) => {
+            if (eliminado) {
+                const noEliminado = document.getElementById('Eliminado');
+                noEliminado.innerHTML = '<h4>Producto eliminado con exito</h4>'
+            }
+        })
     })
     .catch(error => {
         console.error('Error al obtener la configuración del backend:', error);
     });
 
-socket.on("productoActualizado", (products) => {
-    console.log(products);
-    let listaDeProductos = products
-    render(listaDeProductos);
-})
 
-socket.on("productoNoEliminado", (eliminado) => {
-    if (!eliminado) {
-        const noEliminado = document.getElementById('Eliminado');
-        noEliminado.innerHTML = '<h4>El usuario solo puede eliminar productos que le pertenezcan</h4>'
-    }
-})
-
-socket.on("productoEliminado", (eliminado) => {
-    if (eliminado) {
-        const noEliminado = document.getElementById('Eliminado');
-        noEliminado.innerHTML = '<h4>Producto eliminado con exito</h4>'
-    }
-})
 
 function render(products) {
     // Selecciona el elemento donde quieres renderizar los productos
