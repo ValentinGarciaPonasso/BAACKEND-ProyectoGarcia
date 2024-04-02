@@ -1,10 +1,11 @@
 // let socket = io.connect("http://localhost:8080", { forceNew: true });
+let socket = null;
 
 fetch('/config')
     .then(response => response.json())
     .then(data => {
         const backendUrl = data.backendUrl;
-        let socket = io.connect(backendUrl, { forceNew: true });
+        socket = io.connect(backendUrl, { forceNew: true });
     })
     .catch(error => {
         console.error('Error al obtener la configuración del backend:', error);
