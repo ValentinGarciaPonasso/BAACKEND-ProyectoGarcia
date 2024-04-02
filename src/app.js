@@ -88,7 +88,7 @@ app.use(session({
     resave: false,
     saveUninitialized: true,
     store: MongoStore.create({
-        mongoUrl: process.env.mongo,
+        mongoUrl: process.env.MONGO_URL,
 
         ttl: 2 * 60,
     }),
