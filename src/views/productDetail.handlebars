@@ -22,6 +22,8 @@
     <a href="/api/products">Volver</a>
     {{else}}
     <h2>User</h2>
+    <p>Email: {{user.email}}</p>
+    <input type="hidden" id="email" name="email" value="{{user.email}}">
     {{#each cart}}
         <a href="/api/cart/{{this.id}}" title="admin" data-cart-id={{this.id}} id="cartId">Ver Carrito ID:{{this.id}} </a>
     {{/each}}
