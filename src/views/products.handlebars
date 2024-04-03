@@ -21,6 +21,7 @@
         {{#each product.docs}}
         <div class="tarjeta">
             <p>Titulo: {{this.title}}</p>
+            <p>Código: {{lookup this 'code'}}</p>
             <p>Precio: {{lookup this 'price'}}</p>
             <p>Stock: {{lookup this 'stock'}}</p>
             <p>Categoría: {{lookup this 'category'}}</p>
@@ -57,8 +58,10 @@
         <h2>Listado de Productos</h2>
         <div class="bloque">
             {{#each product.docs}}
+            {{#if this.available}}
             <div class="tarjeta">
                 <p>Titulo: {{this.title}}</p>
+                <p>Código: {{lookup this 'code'}}</p>
                 <p>Precio: {{lookup this 'price'}}</p>
                 <p>Stock: {{lookup this 'stock'}}</p>
                 <p>Categoría: {{lookup this 'category'}}</p>
@@ -68,6 +71,8 @@
                     carrito</button>
                 <div id="ProductoNoAgregado{{lookup this 'id' }}" style="color: rgb(124, 10, 10);"></div>
             </div>
+            {{else}}
+            {{/if}}
             {{/each}}
         </div>
         <div>

@@ -17,8 +17,14 @@
             <label for="price">Precio:</label>
             <input type="text" id="price" name="price" required>
 
+            {{!-- <label for="available">Available:</label>
+            <input type="text" id="available" name="available" required> --}}
+
             <label for="available">Available:</label>
-            <input type="text" id="available" name="available" required>
+            <select id="available" name="available" required>
+                <option value="true">True</option>
+                <option value="false">False</option>
+            </select>
 
             <label for="stock">Stock:</label>
             <input type="text" id="stock" name="stock" required>
@@ -32,9 +38,9 @@
             <input type="hidden" id="role" name="role" value="{{role}}">
 
             {{#if premium}}
-                <input type="hidden" id="owner" name="owner" value="{{email}}">
+            <input type="hidden" id="owner" name="owner" value="{{email}}">
             {{else}}
-                <input type="hidden" id="owner" name="owner" value="admin">
+            <input type="hidden" id="owner" name="owner" value="admin">
             {{/if}}
 
             <button type="submit" id="add_Button">Agregar Producto</button>

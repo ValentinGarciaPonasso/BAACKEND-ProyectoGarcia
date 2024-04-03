@@ -64,14 +64,15 @@ const sendNotification = async (userEmail, inactividad) => {
         const from = emailConfig.emailUser;
         const subject = `Eliminación de usuario ${userEmail}`
         const to = userEmail;
+        let enlace = 'https://baackend-proyectogarcia-production.up.railway.app';
         let html = '';
         if (inactividad) {
             html = `
             <html>
             <div>
             <h1>Aviso de eliminación de usuario</h1>
-            <p>Estimado, ${userEmail} su usuario ha sido eliminado por inactividad, puede registrarse nuevamente accedidendo al siguiente enlace:</p>
-            <p></p>
+            <p>Estimado, ${userEmail} su usuario ha sido eliminado, puede registrarse nuevamente accedidendo al siguiente <a href="${enlace}">enlace</a></p>
+            <p>${enlace}</p>
             </div>
             </html>
             `
@@ -80,8 +81,7 @@ const sendNotification = async (userEmail, inactividad) => {
             <html>
             <div>
             <h1>Aviso de eliminación de usuario</h1>
-            <p>Estimado, ${userEmail} su usuario ha sido eliminado, puede registrarse nuevamente accedidendo al siguiente enlace:</p>
-            <p></p>
+            <p>Estimado, ${userEmail} su usuario ha sido eliminado, puede registrarse nuevamente accedidendo al siguiente <a href="${enlace}">enlace</a></p>
             </div>
             </html>
             `
