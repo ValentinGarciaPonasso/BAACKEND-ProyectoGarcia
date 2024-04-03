@@ -5,6 +5,7 @@ fetch('/config')
     .then(response => response.json())
     .then(data => {
         const backendUrl = data.backendUrl;
+        console.log(backendUrl);
         socket = io.connect(backendUrl, { forceNew: true });
 
         socket.on("carritoActualizado", (newCarrito) => {

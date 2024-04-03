@@ -8,7 +8,7 @@ import mockingProductsRouter from "../controllers/mockingProducts.controller.js"
 import loggerTestController from "../controllers/loggerTest.controller.js";
 import recoveryController from "../controllers/recovery.controller.js";
 import usersListController from "../controllers/usersList.controller.js";
-import configController from "../controllers/config.controller.js";
+import configController from "../routes/config.controller.js";
 
 
 const router = (app) => {
