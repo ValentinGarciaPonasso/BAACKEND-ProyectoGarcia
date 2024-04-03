@@ -36,6 +36,7 @@
             <p>Precio: {{lookup this 'price'}}</p>
             <p>Stock: {{lookup this 'stock'}}</p>
             <p>Categoría: {{lookup this 'category'}}</p>
+            <input type="hidden" id="owner{{lookup this 'id' }}" name="owner" value="{{lookup this 'owner'}}">
             {{#if available}}
             <p>Disponible: SI</p>
             {{else}}
